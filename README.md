@@ -76,41 +76,27 @@ hírlistába, a főoldal legfrissebb négy híre közé és az RSS-be (`/feed.xm
 
 ---
 
-## 1. Közzététel GitHub Pages-en
+## 1. Közzététel — már be van állítva
 
-A tároló már elő van készítve (`git init` megtörtént, minden fájl hozzáadva).
+| | |
+|---|---|
+| **Tároló** | https://github.com/Numm1th0r/pomazszszk (publikus) |
+| **Honlap** | **https://numm1th0r.github.io/pomazszszk/** |
+| **Tartalomkezelő** | https://numm1th0r.github.io/pomazszszk/admin/ |
+| **RSS** | https://numm1th0r.github.io/pomazszszk/feed.xml |
 
-**a) Első commit — a saját nevedben**
+A GitHub Pages forrása **GitHub Actions**. Minden `main`-re érkező módosítás után
+a `.github/workflows/deploy.yml` lefuttatja a buildet, ellenőrzi a belső
+hivatkozásokat, és közzéteszi az eredményt — nagyjából egy perc az egész.
+
+Ha valami elromlik, a hivatkozás-ellenőrző megbuktatja a futást, és **a régi
+honlap marad kint** — törött oldal nem kerül élesbe.
 
 ```bash
-cd "/home/marci/Documents/Idősek otthona"
-git config user.name  "A Te Neved"
-git config user.email "marciistvan45@gmail.com"
-git commit -m "Az új honlap első változata"
+git add -A && git commit -m "Változtatás leírása" && git push
 ```
 
-**b) Tároló létrehozása a GitHubon**
-
-Hozz létre egy új, üres tárolót a github.com-on (README nélkül), majd:
-
-```bash
-git remote add origin https://github.com/FELHASZNALO/pomazszszk.git
-git push -u origin main
-```
-
-**c) A Pages bekapcsolása**
-
-A tárolóban: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
-
-Ennyi. A `.github/workflows/deploy.yml` minden `main`-re érkező módosítás után
-lefuttatja a buildet, ellenőrzi a hivatkozásokat, és közzéteszi az eredményt.
-A cím `https://FELHASZNALO.github.io/pomazszszk/` lesz.
-
-> **Fontos:** a honlap gyökérkönyvtárból kiszolgálva működik helyesen (a
-> hivatkozások relatívak, szóval alkönyvtárban is jó). Ha a `pomazszszk.hu`
-> domaint teszed rá, minden út rendben lesz.
-
-**d) Saját domain (nem kötelező)**
+### Saját domain (pomazszszk.hu)
 
 Hozz létre a tároló gyökerében egy `CNAME` nevű fájlt egyetlen sorral:
 
@@ -118,11 +104,10 @@ Hozz létre a tároló gyökerében egy `CNAME` nevű fájlt egyetlen sorral:
 pomazszszk.hu
 ```
 
-A build automatikusan bemásolja a kimenetbe. A domain DNS-ében pedig a
-GitHub Pages A/AAAA rekordjait (vagy `www` esetén CNAME-et) kell beállítani a
-Settings → Pages oldalon látható útmutató szerint.
-
----
+A build automatikusan bemásolja a kimenetbe. A domain DNS-ében a GitHub Pages
+A/AAAA rekordjait (vagy `www` esetén CNAME-et) kell beállítani a
+Settings → Pages oldalon látható útmutató szerint. Amíg ez nincs meg, a honlap
+a fenti `github.io` címen érhető el.
 
 ## 2. Tartalomkezelő (CMS) beállítása
 
@@ -131,13 +116,13 @@ A `src/admin/` mappában **Sveltia CMS** van előkészítve. Ez a Decap CMS mode
 **GitHub Pages-en OAuth-kiszolgáló nélkül is be lehet vele lépni.** (Az eredeti
 Decap CMS GitHub-belépéshez külön OAuth-szolgáltatást kellene üzemeltetni.)
 
-A `config.yml`-ben a tároló nevét a `build.py` automatikusan kitölti a
-`git remote` alapján — ezért a `git remote add origin …` után érdemes egyszer
-újra futtatni a buildet (a GitHub Action ezt magától megteszi).
+A `config.yml`-ben a tároló neve automatikusan kitöltődik (`Numm1th0r/pomazszszk`),
+a GitHub Action a `GITHUB_REPOSITORY` változóból, helyben pedig a `git remote`-ból
+olvassa ki.
 
 ### Belépés — legegyszerűbb út (személyes kulcs)
 
-1. Nyisd meg: `https://FELHASZNALO.github.io/pomazszszk/admin/`
+1. Nyisd meg: **https://numm1th0r.github.io/pomazszszk/admin/**
 2. Kattints a **„Sign In with Token”** gombra.
 3. A megjelenő ablakban lévő linken hozz létre egy GitHub *personal access
    token*-t (a jogosultságok előre ki vannak választva), másold be, kész.
