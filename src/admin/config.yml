@@ -91,3 +91,79 @@ collections:
       - name: body
         label: A hír szövege
         widget: markdown
+
+  - name: galeria
+    label: Képgaléria
+    label_singular: Album
+    description: >-
+      Egy album = egy esemény. Töltsd fel a fényképeket, és a honlapon
+      megjelenik hozzájuk egy nagyítható képnézegető.
+    folder: content/galeria
+    create: true
+    delete: true
+    extension: md
+    format: yaml-frontmatter
+    slug: "{{slug}}"
+    summary: "{{year}} — {{title}}"
+    sortable_fields: [date, title]
+    media_folder: "/assets/img/galeria"
+    public_folder: "/assets/img/galeria"
+    fields:
+      - name: title
+        label: Album neve
+        widget: string
+        hint: Például „Karácsony” vagy „Majális”.
+
+      - name: year
+        label: Év
+        widget: string
+        hint: Ez jelenik meg a borítón, a cím alatt.
+
+      - name: date
+        label: Dátum
+        widget: datetime
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        format: "YYYY-MM-DD"
+        hint: Az albumok dátum szerint, a legfrissebbel kezdve sorakoznak.
+
+      - name: cover
+        label: Borítókép
+        widget: image
+        required: false
+        hint: >-
+          Ez látszik a galéria főoldalán. Ha üresen hagyod, az első feltöltött
+          fénykép lesz a borító.
+
+      - name: photos
+        label: Fényképek
+        label_singular: Fénykép
+        widget: list
+        required: false
+        summary: "{{fields.caption}}"
+        hint: >-
+          Az „Add Fénykép” gombbal adhatsz hozzá képeket. Nyugodtan tölthetsz fel
+          telefonnal készült, nagy fájlokat — a honlap automatikusan legyártja
+          belőlük a kicsinyített és a nagy nézetet.
+        fields:
+          - name: image
+            label: Kép
+            widget: image
+          - name: caption
+            label: Képaláírás
+            widget: string
+            required: false
+            hint: Nem kötelező, de segít a látássérült látogatóknak.
+
+      - name: external_url
+        label: Régi galéria hivatkozása
+        widget: string
+        required: false
+        hint: >-
+          Csak a korábbi honlapról átvett albumoknál kell. Ha nincs feltöltött
+          fénykép, a borítóra kattintva ide jut a látogató.
+
+      - name: body
+        label: Album leírása
+        widget: markdown
+        required: false

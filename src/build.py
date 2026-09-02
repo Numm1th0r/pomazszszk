@@ -858,13 +858,159 @@ def write_feed(posts):
         f.write(xml)
 
 
+# --- Képgaléria: bélyegképek és albumoldalak ------------------------------
+
+GALLERY_SRC = os.path.join(ASSETS, "img", "galeria")
+GALLERY_OUT = "assets/img/galeria"
+THUMB_SIZE = (640, 480)      # 4:3 bélyegkép a rácshoz
+LARGE_MAX = 1600             # a nagy nézet leghosszabb oldala
+
+
+def _gallery_files(albums):
+    names = []
+    for a in albums:
+        if a["cover"]:
+            names.append(a["cover"])
+        names.extend(p["file"] for p in a["photos"])
+    return sorted(set(names))
+
+
+def build_gallery_images(albums):
+    """A feltöltött fotókból bélyegkép és nagy nézet készítése.
+
+    Pillow nélkül is működik: ilyenkor az eredeti fájlt másoljuk mindkét
+    helyre, csak nagyobb lesz a letöltendő méret.
+    """
+    names = _gallery_files(albums)
+    if not names:
+        return
+    thumb_dir = os.path.join(OUT, "assets", "img", "galeria", "thumb")
+    large_dir = os.path.join(OUT, "assets", "img", "galeria", "large")
+    os.makedirs(thumb_dir, exist_ok=True)
+    os.makedirs(large_dir, exist_ok=True)
+
+    try:
+        from PIL import Image, ImageOps
+    except ImportError:
+        Image = None
+        print("  ! A Pillow nincs telepítve — az eredeti méretű képek kerülnek ki.")
+        print("    Telepítés:  pip install Pillow")
+
+    made = skipped = 0
+    for name in names:
+        src = os.path.join(GALLERY_SRC, name)
+        if not os.path.isfile(src):
+            skipped += 1
+            continue
+        base = os.path.splitext(name)[0] + ".jpg"
+        thumb_path = os.path.join(thumb_dir, base)
+        large_path = os.path.join(large_dir, base)
+        if Image is None:
+            shutil.copy2(src, os.path.join(thumb_dir, name))
+            shutil.copy2(src, os.path.join(large_dir, name))
+            made += 1
+            continue
+        try:
+            with Image.open(src) as im:
+                im = ImageOps.exif_transpose(im).convert("RGB")
+                thumb = ImageOps.fit(im, THUMB_SIZE, Image.LANCZOS, centering=(0.5, 0.42))
+                thumb.save(thumb_path, "JPEG", quality=78, optimize=True, progressive=True)
+                large = im.copy()
+                large.thumbnail((LARGE_MAX, LARGE_MAX), Image.LANCZOS)
+                large.save(large_path, "JPEG", quality=82, optimize=True, progressive=True)
+            made += 1
+        except Exception as exc:                      # sérült vagy ismeretlen fájl
+            print("  ! Nem sikerült feldolgozni: %s (%s)" % (name, exc))
+            skipped += 1
+    print("  Galéria: %d kép feldolgozva%s." % (made, ", %d kihagyva" % skipped if skipped else ""))
+
+
+def gallery_asset(name, kind, depth):
+    """Egy galériakép útvonala (kind: 'thumb' vagy 'large')."""
+    if not name:
+        return ""
+    jpg = os.path.splitext(name)[0] + ".jpg"
+    candidate = f"{GALLERY_OUT}/{kind}/{jpg}"
+    if not os.path.isfile(os.path.join(OUT, candidate)):
+        candidate = f"{GALLERY_OUT}/{kind}/{name}"
+    return rel(candidate, depth)
+
+
+def album_href(album, depth):
+    if album["photos"]:
+        return rel(f"kepgaleria/{album['slug']}.html", depth), False
+    if album["external_url"]:
+        return album["external_url"], True
+    return rel(f"kepgaleria/{album['slug']}.html", depth), False
+
+
+def page_album(album):
+    d = 1
+    photos = album["photos"]
+    tiles = []
+    for i, photo in enumerate(photos, 1):
+        caption = photo["caption"] or f"{album['title']} – {album['year']}, {i}. kép"
+        tiles.append(
+            f'<a class="album__item" href="{gallery_asset(photo["file"], "large", d)}" '
+            f'data-caption="{esc(photo["caption"])}">'
+            f'<img src="{gallery_asset(photo["file"], "thumb", d)}" alt="{esc(caption)}" '
+            f'loading="lazy" width="640" height="480">'
+            f'<span class="album__zoom" aria-hidden="true">{icon("image")}</span></a>')
+
+    if photos:
+        grid = f'<div class="album" data-lightbox>{"".join(tiles)}</div>'
+        note = ""
+    else:
+        grid = ""
+        note = f"""
+    <div class="note note--brand">{icon('info')}
+      <p>Ebbe az albumba még nem töltöttünk fel képeket.
+      {'A korábbi galéria a régi honlapunkon érhető el.' if album['external_url'] else ''}</p>
+    </div>"""
+
+    outlink = ""
+    if album["external_url"]:
+        outlink = (f'<div class="btn-row" style="margin-top:2rem">'
+                   f'<a class="btn btn--ghost" href="{album["external_url"]}" target="_blank" rel="noopener">'
+                   f'Korábbi galéria a régi honlapon {icon("external")}</a></div>')
+
+    lead = f"{album['year']} · {len(photos)} kép" if photos else album["year"]
+    body = pagehead(esc(album["title"]), lead,
+                    [("Képgaléria", "kepgaleria.html"), (album["title"], None)], d) + f"""
+<section class="section">
+  <div class="container">
+    {album['description_html']}
+    {note}
+    {grid}
+    {outlink}
+    <div class="btn-row" style="margin-top:2.5rem">
+      <a class="btn btn--ghost" href="{rel('kepgaleria.html', d)}">{icon('arrow-right')} Összes album</a>
+    </div>
+  </div>
+</section>
+"""
+    return {"path": f"kepgaleria/{album['slug']}.html", "active": "kepgaleria.html", "body": body,
+            "title": f"{album['title']} – {album['year']}",
+            "description": f"Képek a(z) {album['title']} ({album['year']}) albumból – "
+                           f"Szociális Szolgáltatási Központ, Pomáz."}
+
+
 def page_kepgaleria():
     d = 0
-    items = "".join(f"""
-    <a href="{SITE['url']}/kepgaleria/{slug}/" target="_blank" rel="noopener">
-      <img src="assets/img/galeria/{slug}.jpg" alt="{esc(title)} – {esc(year)}" loading="lazy" width="760" height="570">
-      <span class="gallery__label">{esc(title)} <span style="opacity:.75;font-weight:500">· {esc(year)}</span></span>
-    </a>""" for title, year, slug in GALLERY)
+    cards = []
+    for a in GALLERY:
+        href, external = album_href(a, d)
+        count = len(a["photos"])
+        meta = f"{count} kép" if count else ("régi galéria" if a["external_url"] else "hamarosan")
+        cards.append(f"""
+    <a class="gallery__card" href="{href}"{link_attrs(href) if external else ''}>
+      <span class="gallery__media"><img src="{gallery_asset(a['cover'], 'thumb', d)}"
+        alt="{esc(a['title'])} – {esc(a['year'])}" loading="lazy" width="640" height="480"></span>
+      <span class="gallery__label">
+        <span class="gallery__name">{esc(a['title'])}</span>
+        <span class="gallery__meta">{esc(a['year'])} · {esc(meta)}{' ↗' if external else ''}</span>
+      </span>
+    </a>""")
 
     body = pagehead("Képgaléria", "Ünnepeink, kirándulásaink és mindennapjaink képekben.",
                     [("Képgaléria", None)], d) + f"""
@@ -872,10 +1018,10 @@ def page_kepgaleria():
   <div class="container">
     <div class="note note--brand" style="margin-bottom:2rem">
       {icon('info')}
-      <p>A galériák képei a jelenlegi honlapunkon érhetők el. A gyermekekről az adatvédelmi
-      előírások betartása miatt nem teszünk közzé fényképeket.</p>
+      <p>A gyermekekről az adatvédelmi előírások betartása miatt nem teszünk közzé fényképeket.
+      A ↗ jellel jelölt albumok képei még a korábbi honlapunkon érhetők el.</p>
     </div>
-    <div class="gallery">{items}</div>
+    <div class="gallery">{''.join(cards)}</div>
   </div>
 </section>
 {cta_band(0, "Csatlakozzon programjainkhoz!",
@@ -1100,6 +1246,7 @@ def all_pages():
     pages += [page_etlapok(), page_dokumentumok(), page_hirek(), page_kepgaleria(),
               page_kapcsolat(), page_jogszabalyok(), page_allas(), page_kozzeteteli()]
     pages += [page_news_item(p, i) for i, p in enumerate(NEWS)]
+    pages += [page_album(a) for a in GALLERY]
     return pages
 
 
@@ -1146,7 +1293,9 @@ def copy_assets():
     dest = os.path.join(OUT, "assets")
     if os.path.isdir(dest):
         shutil.rmtree(dest)
-    shutil.copytree(ASSETS, dest)
+    # A galéria eredeti (nagy) fájljai nem kerülnek ki: helyettük a build
+    # bélyegképet és webre méretezett nagy nézetet állít elő.
+    shutil.copytree(ASSETS, dest, ignore=shutil.ignore_patterns("galeria"))
     if os.path.isdir(ADMIN):
         admin_dest = os.path.join(OUT, "admin")
         if os.path.isdir(admin_dest):
@@ -1162,6 +1311,7 @@ def copy_assets():
 def write_multipage(pages):
     os.makedirs(OUT, exist_ok=True)
     copy_assets()
+    build_gallery_images(GALLERY)
     for p in pages:
         dest = os.path.join(OUT, p["path"])
         os.makedirs(os.path.dirname(dest), exist_ok=True)
@@ -1187,6 +1337,8 @@ def data_uri(path):
 
 
 def write_singlefile(pages):
+    os.makedirs(OUT, exist_ok=True)
+    build_gallery_images(GALLERY)          # a bélyegképeknek meg kell lenniük
     css = open(os.path.join(ASSETS, "style.css"), encoding="utf-8").read()
     js = open(os.path.join(ASSETS, "app.js"), encoding="utf-8").read()
 
@@ -1202,7 +1354,10 @@ def write_singlefile(pages):
     def repl(m):
         name = m.group(1)
         if name not in cache:
-            cache[name] = data_uri(os.path.join(ASSETS, "img", name))
+            # A galéria bélyegképei a kimenetben készülnek, a többi kép a forrásban van.
+            generated = os.path.join(OUT, "assets", "img", name)
+            source = os.path.join(ASSETS, "img", name)
+            cache[name] = data_uri(generated if os.path.isfile(generated) else source)
         return 'data-img="%s" src="data:image/svg+xml,%%3Csvg xmlns=\'http://www.w3.org/2000/svg\'/%%3E"' % name
     doc = re.sub(r'src="assets/img/([^"]+)"', repl, doc)
     img_map = "{" + ",".join('"%s":"%s"' % (k, v) for k, v in cache.items()) + "}"

@@ -10,8 +10,10 @@ szkript generálja, a GitHub pedig automatikusan közzéteszi.
 
 ```
 content/hirek/*.md       ← A HÍREK. Egy fájl = egy hír. Ezt szerkeszti a CMS is.
+content/galeria/*.md     ← A KÉPGALÉRIA ALBUMAI. Egy fájl = egy album.
 assets/                  ← Képek, stíluslap, JavaScript (forrás)
   img/hirek/             ← A hírekhez feltöltött képek helye
+  img/galeria/           ← A galéria eredeti fényképei (a build kicsinyíti)
 src/
   content.py             Minden állandó szöveg és adat (szolgáltatások, elérhetőségek…)
   build.py               Az oldalgenerátor
@@ -75,6 +77,48 @@ Minden hír kap saját oldalt (`/hirek/adventi-keszulodes.html`), bekerül a
 hírlistába, a főoldal legfrissebb négy híre közé és az RSS-be (`/feed.xml`).
 
 ---
+
+## Képgaléria
+
+Egy album egy Markdown-fájl a `content/galeria/` mappában:
+
+```markdown
+---
+title: Adventi délután
+year: 2026
+date: 2026-12-05
+cover: advent-01.jpg
+photos:
+  - image: /assets/img/galeria/advent-01.jpg
+    caption: Koszorúkészítés
+  - image: /assets/img/galeria/advent-02.jpg
+external_url: https://pomazszszk.hu/kepgaleria/regi-album/
+---
+```
+
+- **`photos`** — a fényképek listája. A `caption` nem kötelező, de segít a
+  látássérült látogatóknak (ha nincs, automatikus leírás készül).
+- **`cover`** — a galéria főoldalán látszó borító. Ha üres, az első fénykép lesz az.
+- **`external_url`** — csak a régi honlapról átvett albumoknál. Ha az albumban
+  nincs feltöltött fénykép, a borító erre a címre visz.
+
+**A képek méretezése automatikus.** Az eredeti fájlok az `assets/img/galeria/`
+mappában maradnak (akár telefonnal készült, több megabájtos fotók), a build
+pedig két méretet gyárt belőlük a kimenetbe:
+
+| | méret | mire jó |
+|---|---|---|
+| `thumb/` | 640 × 480 | a rácsban látható bélyegkép |
+| `large/` | max. 1600 px | a nagyított nézet |
+
+Az eredeti, nagy fájlok **nem kerülnek ki** a honlapra, tehát a látogató sosem
+tölt le feleslegesen sok adatot. Ehhez a `Pillow` csomag kell; a GitHub Action
+telepíti. Helyben enélkül is lefut a build, csak akkor az eredeti méretű képek
+kerülnek ki (a `pip install Pillow` megoldja).
+
+Minden album kap saját oldalt (`/kepgaleria/advent-delutan.html`), rajta
+**nagyítható képnézegetővel**: kattintás/koppintás nagyít, a nyílbillentyűk és az
+ujjal húzás lapoz, az `Esc` bezár.
 
 ## 1. Közzététel — már be van állítva
 
@@ -158,6 +202,34 @@ súgószöveggel vannak beállítva a `src/admin/config.yml`-ben; ott bővíthet
 
 ---
 
+## Biztonság — miért nem rés a tartalomkezelő?
+
+Az `/admin/` oldal **statikus HTML és JavaScript, nem tartalmaz jelszót vagy
+kulcsot.** A `config.yml` nyilvánosan olvasható, de csak a tároló nevét és a
+mezők szerkezetét írja le — a tároló amúgy is publikus.
+
+Az írás joga nem az oldalon múlik, hanem a GitHubon:
+
+- A böngésző közvetlenül a GitHub API-val beszél; **nincs köztes kiszolgáló,
+  amit meg lehetne támadni**, és nincs bejelentkezési végpont, amit lehetne
+  törni. Ebben lényegesen kevésbé támadható, mint egy WordPress-adminfelület.
+- Írni csak az tud, akinek **érvényes GitHub-tokenje és a tárolóhoz írási joga**
+  van. Aki csak megnyitja az `/admin/` oldalt, semmit nem lát és semmit nem tehet.
+- A CMS scriptje **verzióra rögzítve és SRI-ellenőrzéssel** (`integrity`) töltődik
+  be: ha a CDN-en a fájl bármit változna, a böngésző nem futtatja le.
+
+Amire viszont **érdemes figyelni**: a token a böngésző tárolójában marad. Ezért
+ne klasszikus (`repo` jogú) tokent használj, hanem **fine-grained tokent**, amely
+csak erre az egy tárolóra érvényes:
+
+> GitHub → Settings → Developer settings → Personal access tokens →
+> **Fine-grained tokens** → Generate new token → *Repository access:* **Only
+> select repositories** → `pomazszszk` → *Permissions:* **Contents: Read and
+> write** → lejárat: 90 nap.
+
+Így ha a token mégis kikerülne, csak ezt az egy — amúgy is nyilvános — tárolót
+érinti, és a lejárattal magától érvénytelenné válik.
+
 ## Akadálymentesség
 
 Az idős látogatókra tervezve:
@@ -170,6 +242,10 @@ Az idős látogatókra tervezve:
 - „Ugrás a tartalomra” link, látható fókuszjelölés, morzsamenü, teljes
   billentyűzetes kezelhetőség.
 - Kattintható telefonszámok (`tel:`) és e-mail címek.
+- A képnézegető billentyűzetről is kezelhető (nyilak, `Esc`), a fókusz nem
+  szökik ki belőle, és minden fényképnek van szöveges leírása.
+- Mobilbarát: minden oldal telefonon is teljes értékű, a táblázatok
+  egymás alá rendeződnek, a gombok legalább 44 px-esek.
 - Nyomtatási stíluslap: a menük eltűnnek, a linkek URL-je kiíródik.
 
 ## Amit a régi tartalomhoz képest javítottam

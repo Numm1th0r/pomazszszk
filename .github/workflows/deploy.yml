@@ -27,6 +27,9 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Képfeldolgozó telepítése
+        run: pip install --disable-pip-version-check Pillow
+
       - name: Honlap generálása
         run: python3 src/build.py
 

@@ -501,16 +501,60 @@ def load_news(folder=None):
 NEWS = load_news()
 
 # --- Képgaléria -----------------------------------------------------------
-GALLERY = [
-    ("Karácsony", "2025", "karacsony-2025"),
-    ("Idősek Világnapja", "2025", "idosek-vilagnapja-2025"),
-    ("Őszi programok", "2025", "2025-oszi-programok"),
-    ("Majális", "2025", "majalis-2025"),
-    ("Farsang", "2025", "farsang-2025"),
-    ("Februári események", "2025", "2025-februar"),
-    ("Decemberi események", "2024", "2024-december"),
-    ("Őszi események", "2024", "2024-osz"),
-]
+# Az albumok külön Markdown-fájlokban élnek a content/galeria/ mappában, hogy a
+# tartalomkezelőből is létrehozhatók legyenek. Egy fájl = egy album; a képeket a
+# CMS az assets/img/galeria/ mappába tölti fel.
+
+
+def _basename(path):
+    return str(path).replace("\\", "/").rsplit("/", 1)[-1]
+
+
+def load_gallery(folder=None):
+    """A content/galeria/*.md albumok beolvasása, legfrissebb elöl."""
+    folder = folder or os.path.join(_ROOT, "content", "galeria")
+    albums = []
+    if not os.path.isdir(folder):
+        return albums
+    for name in sorted(os.listdir(folder)):
+        if not name.endswith(".md") or name.startswith("_"):
+            continue
+        raw = open(os.path.join(folder, name), encoding="utf-8").read()
+        meta, body = split_front_matter(raw)
+        if not meta.get("title"):
+            continue
+
+        photos = []
+        raw_photos = meta.get("photos")
+        if not isinstance(raw_photos, list):     # üres vagy "[]" érték
+            raw_photos = []
+        for item in raw_photos:
+            if isinstance(item, dict):
+                src, caption = item.get("image"), item.get("caption") or ""
+            else:
+                src, caption = item, ""
+            if src:
+                photos.append({"file": _basename(src), "caption": str(caption)})
+
+        cover = _basename(meta.get("cover") or "")
+        if not cover and photos:
+            cover = photos[0]["file"]
+
+        albums.append({
+            "slug": str(meta.get("slug") or name[:-3]),
+            "title": str(meta["title"]),
+            "year": str(meta.get("year") or str(meta.get("date", ""))[:4]),
+            "date": str(meta.get("date") or ""),
+            "cover": cover,
+            "photos": photos,
+            "external_url": str(meta.get("external_url") or ""),
+            "description_html": render(body) if body.strip() else "",
+        })
+    albums.sort(key=lambda a: (a["date"], a["slug"]), reverse=True)
+    return albums
+
+
+GALLERY = load_gallery()
 
 # --- Dokumentumok ---------------------------------------------------------
 DOC_GROUPS = [

@@ -33,8 +33,64 @@ def _coerce(value):
     return v
 
 
+def _parse_block(lines, pos, indent):
+    """Egy behúzási szinthez tartozó kulcs-érték blokk beolvasása."""
+    result = {}
+    while pos < len(lines):
+        raw = lines[pos]
+        if not raw.strip() or raw.lstrip().startswith("#"):
+            pos += 1
+            continue
+        cur = len(raw) - len(raw.lstrip())
+        if cur < indent or raw.lstrip().startswith("- "):
+            break
+        if ":" not in raw:
+            pos += 1
+            continue
+        key, _, value = raw.strip().partition(":")
+        key = key.strip()
+        if value.strip():
+            result[key] = _coerce(value)
+            pos += 1
+            continue
+        # Üres érték: alatta beágyazott lista következhet.
+        items, pos = _parse_list(lines, pos + 1, cur)
+        result[key] = items if items else ""
+    return result, pos
+
+
+def _parse_list(lines, pos, parent_indent):
+    """`- ` kezdetű elemek: egyszerű értékek vagy kulcs-érték blokkok."""
+    items = []
+    while pos < len(lines):
+        raw = lines[pos]
+        if not raw.strip():
+            pos += 1
+            continue
+        cur = len(raw) - len(raw.lstrip())
+        stripped = raw.lstrip()
+        if cur <= parent_indent or not stripped.startswith("- "):
+            break
+        rest = stripped[2:].strip()
+        m = re.match(r"^([A-Za-z_][\w-]*)\s*:\s*(.*)$", rest)
+        if m:
+            entry = {m.group(1): _coerce(m.group(2))}
+            pos += 1
+            extra, pos = _parse_block(lines, pos, cur + 2)
+            entry.update(extra)
+            items.append(entry)
+        else:
+            items.append(_coerce(rest))
+            pos += 1
+    return items, pos
+
+
 def split_front_matter(text):
-    """A `---` közé zárt fejlécet szótárrá alakítja, és visszaadja a törzset is."""
+    """A `---` közé zárt fejlécet szótárrá alakítja, és visszaadja a törzset is.
+
+    A kulcs-érték párokon túl a beágyazott listákat is felismeri – ezt írja a
+    tartalomkezelő, amikor egy albumhoz több képet rendelünk.
+    """
     text = text.lstrip("﻿")
     if not text.startswith("---"):
         return {}, text
@@ -43,17 +99,8 @@ def split_front_matter(text):
         return {}, text
     head = text[3:end]
     body = text[end + 4:].lstrip("\n")
-    meta = {}
-    for line in head.splitlines():
-        line = line.rstrip()
-        if not line.strip() or line.lstrip().startswith("#"):
-            continue
-        if ":" not in line:
-            continue
-        key, _, value = line.partition(":")
-        meta[key.strip()] = _coerce(value)
+    meta, _ = _parse_block(head.splitlines(), 0, 0)
     return meta, body
-
 
 # --- Sorközi elemek -------------------------------------------------------
 

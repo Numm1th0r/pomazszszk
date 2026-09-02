@@ -12,10 +12,17 @@
     Azért ezt használjuk, mert GitHub Pages-en bejelentkezni is tud
     személyes hozzáférési kulccsal (PAT), OAuth-kiszolgáló nélkül.
 
+    A script-hivatkozás verzióra van rögzítve, és SRI-ellenőrzéssel (integrity)
+    van ellátva: ha a CDN-en a fájl bármit változna, a böngésző NEM tölti be.
+    Verziófrissítéskor az integrity értéket is újra kell számolni:
+      curl -sL <url> | openssl dgst -sha384 -binary | openssl base64 -A
+
     Ha mégis az eredeti Decap CMS-t szeretnéd, cseréld ki az alábbi sort erre:
     <script src="https://unpkg.com/decap-cms@3.16.0/dist/decap-cms.js"></script>
     (a Decap GitHub-belépéshez viszont külön OAuth-kiszolgáló kell)
   -->
-  <script src="https://unpkg.com/@sveltia/cms@0.205.1/dist/sveltia-cms.js"></script>
+  <script src="https://unpkg.com/@sveltia/cms@0.205.1/dist/sveltia-cms.js"
+          integrity="sha384-UzAlVLAzKo+h2mRNoZJLArfU1moRE4wy/2Lc/BpfbIBS+7o6g2FK0j1j5lfVZmoO"
+          crossorigin="anonymous"></script>
 </body>
 </html>
