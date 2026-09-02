@@ -71,10 +71,13 @@ collections:
           Például „Adventi koszorúk az asztalon”.
 
       - name: highlight
-        label: Kiemelt hír („Fontos” címkével)
+        label: Kiemelt hír
         widget: boolean
         default: false
         required: false
+        hint: >-
+          A kiemelt hírek „Fontos” címkét kapnak, és a hírlista, illetve a
+          főoldal legelejére kerülnek, a dátumuktól függetlenül.
 
       - name: link_label
         label: Gomb felirata (nem kötelező)
@@ -137,23 +140,15 @@ collections:
 
       - name: photos
         label: Fényképek
-        label_singular: Fénykép
-        widget: list
+        widget: image
+        multiple: true
         required: false
-        summary: "{{fields.caption}}"
         hint: >-
-          Az „Add Fénykép” gombbal adhatsz hozzá képeket. Nyugodtan tölthetsz fel
-          telefonnal készült, nagy fájlokat — a honlap automatikusan legyártja
-          belőlük a kicsinyített és a nagy nézetet.
-        fields:
-          - name: image
-            label: Kép
-            widget: image
-          - name: caption
-            label: Képaláírás
-            widget: string
-            required: false
-            hint: Nem kötelező, de segít a látássérült látogatóknak.
+          Egyszerre több képet is kijelölhetsz és feltölthetsz: kattints a
+          mezőre, majd a fájlválasztóban jelöld ki az összeset (Ctrl+A, vagy
+          Shift-tel egy tartományt), vagy egyszerűen húzd rá a képeket.
+          Nyugodtan tölthetsz fel telefonnal készült, nagy fájlokat — a honlap
+          automatikusan legyártja belőlük a kicsinyített és a nagy nézetet.
 
       - name: body
         label: Album leírása

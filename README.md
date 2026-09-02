@@ -76,6 +76,10 @@ A `title` és a `date` kötelező, a többi mező elhagyható. A képek a
 Minden hír kap saját oldalt (`/hirek/adventi-keszulodes.html`), bekerül a
 hírlistába, a főoldal legfrissebb négy híre közé és az RSS-be (`/feed.xml`).
 
+A `highlight: true` jelölésű hírek **„Fontos” címkét kapnak, és a hírlista,
+illetve a főoldal legelejére kerülnek**, a dátumuktól függetlenül. Ha már nem
+aktuális, elég a jelölést levenni, és visszasorolódik a dátuma szerinti helyre.
+
 ---
 
 ## Képgaléria
@@ -89,15 +93,18 @@ year: 2026
 date: 2026-12-05
 cover: advent-01.jpg
 photos:
-  - image: /assets/img/galeria/advent-01.jpg
-    caption: Koszorúkészítés
-  - image: /assets/img/galeria/advent-02.jpg
+  - /assets/img/galeria/advent-01.jpg
+  - /assets/img/galeria/advent-02.jpg
+  - /assets/img/galeria/advent-03.jpg
 ---
 ```
 
-- **`photos`** — a fényképek listája. A `caption` nem kötelező, de segít a
-  látássérült látogatóknak (ha nincs, automatikus leírás készül).
+- **`photos`** — a fényképek listája. A tartalomkezelőben **egyszerre több képet
+  is kijelölhetsz és feltölthetsz**: a fájlválasztóban `Ctrl+A`-val az összeset,
+  `Shift`-tel egy tartományt, vagy egyszerűen rá is húzhatod a képeket a mezőre.
 - **`cover`** — a galéria főoldalán látszó borító. Ha üres, az első fénykép lesz az.
+- Minden fénykép automatikus szöveges leírást kap („Adventi délután – 2026, 3. kép”),
+  hogy a felolvasóprogramok is használni tudják.
 
 **A képek méretezése automatikus.** Az eredeti fájlok az `assets/img/galeria/`
 mappában maradnak (akár telefonnal készült, több megabájtos fotók), a build

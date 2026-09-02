@@ -496,7 +496,9 @@ def load_news(folder=None):
                      if meta.get("link_label") and meta.get("link_href") else None),
             "body_html": render(body, media_prefix="assets/img/hirek/"),
         })
-    posts.sort(key=lambda p: (p["date"], p["slug"]), reverse=True)
+    # A „Fontos” jelölésű hírek elöl, azon belül (és utána) dátum szerint,
+    # a legfrissebbel kezdve.
+    posts.sort(key=lambda p: (p["highlight"], p["date"], p["slug"]), reverse=True)
     return posts
 
 
