@@ -1,0 +1,114 @@
+{
+  "contacts": [
+    {
+      "slug": "etkeztetes",
+      "service": "Szociális étkeztetés",
+      "person": "Garai Péterné, csoportvezető",
+      "address": "2013 Pomáz, Községház utca 2.",
+      "phones": [
+        "+36 20 234 8004"
+      ],
+      "email": "garai.peterne@szszk.pomaz.hu",
+      "note": "",
+      "extra_emails": []
+    },
+    {
+      "slug": "hazi-segitsegnyujtas",
+      "service": "Házi segítségnyújtás",
+      "person": "Garai Péterné, csoportvezető · Letonai Gabriella, szakmai vezető",
+      "address": "2013 Pomáz, Községház utca 2.",
+      "phones": [
+        "+36 20 234 8004"
+      ],
+      "email": "letonai.gabriella@szszk.pomaz.hu",
+      "note": "",
+      "extra_emails": [
+        {
+          "label": "Garai Péterné",
+          "email": "garai.peterne@szszk.pomaz.hu"
+        },
+        {
+          "label": "Galyasi-Szécsi Alexandra, asszisztens",
+          "email": "galyasi.szecsi.a@szszk.pomaz.hu"
+        }
+      ]
+    },
+    {
+      "slug": "jelzorendszeres-hazi-segitsegnyujtas",
+      "service": "Jelzőrendszeres házi segítségnyújtás",
+      "person": "Garai Péterné, csoportvezető · Letonai Gabriella, szakmai vezető",
+      "address": "2013 Pomáz, Községház utca 2.",
+      "phones": [
+        "+36 20 234 8004",
+        "+36 26 525 274"
+      ],
+      "email": "letonai.gabriella@szszk.pomaz.hu",
+      "note": "",
+      "extra_emails": []
+    },
+    {
+      "slug": "idosek-klubja",
+      "service": "Idősek Klubja",
+      "person": "Garai Péterné, csoportvezető",
+      "address": "2013 Pomáz, Községház utca 2.",
+      "phones": [
+        "+36 26 525 274",
+        "+36 20 234 8004"
+      ],
+      "email": "garai.peterne@szszk.pomaz.hu",
+      "note": "",
+      "extra_emails": []
+    },
+    {
+      "slug": "idosek-atmeneti-gondozohaza",
+      "service": "Idősek Átmeneti Gondozóháza",
+      "person": "Majoros Ferencné, csoportvezető",
+      "address": "2013 Pomáz, Községház utca 2.",
+      "phones": [
+        "+36 26 525 275",
+        "+36 20 236 0866"
+      ],
+      "email": "atmeneti@szszk.pomaz.hu",
+      "note": "",
+      "extra_emails": []
+    },
+    {
+      "slug": "csalad-es-gyermekjoleti-szolgalat",
+      "service": "Család- és Gyermekjóléti Szolgálat",
+      "person": "Benczik Orsolya, tagintézmény-vezető",
+      "address": "2013 Pomáz, Kossuth Lajos utca 21/A",
+      "phones": [
+        "+36 20 808 7075",
+        "+36 26 322 370"
+      ],
+      "email": "csaladsegito@szszk.pomaz.hu",
+      "note": "Időpontot telefonon és e-mailben is lehet foglalni.",
+      "extra_emails": []
+    },
+    {
+      "slug": "iskolavedono",
+      "service": "Iskolavédőnői szolgálat",
+      "person": "dr. Temesiné Estermann Andrea, iskolavédőnő",
+      "address": "2013 Pomáz, Kossuth Lajos utca 38/B",
+      "phones": [
+        "+36 26 327 244",
+        "+36 20 228 2045"
+      ],
+      "email": "vedonok@pomaz.hu",
+      "note": "Fogadóórák körzetenként, a Védőnői Szolgálat tájékoztatása szerint.",
+      "extra_emails": []
+    },
+    {
+      "slug": "szallitas",
+      "service": "Betegszállítás",
+      "person": "Garai Péterné, csoportvezető",
+      "address": "2013 Pomáz, Községház utca 2.",
+      "phones": [
+        "+36 20 234 8004"
+      ],
+      "email": "garai.peterne@szszk.pomaz.hu",
+      "note": "",
+      "extra_emails": []
+    }
+  ]
+}

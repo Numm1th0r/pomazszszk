@@ -130,10 +130,12 @@ a:hover { color: var(--accent); }
 .card__body > *, .tile > *, .utility__row > *, .btn-row > * { min-width: 0; }
 
 /* Hosszú, szóköz nélküli szövegek (e-mail-cím, URL) törhessenek. */
-a, .prose, .dl__v, .card__text, .tile p, .doclist a, .hours td, .hours th,
+a, .prose, .dl__v, .card__text, .tile p, .hours td, .hours th,
 .news__excerpt, .footer p, .footer ul, .acc__body, .panel, .helpbar__d {
   overflow-wrap: anywhere;
 }
+/* Folyó szövegben csak akkor törjön szó közben, ha muszáj. */
+.prose p, .prose li, .card__text, .news__excerpt, .tile p { overflow-wrap: break-word; }
 
 :focus-visible {
   outline: 3px solid var(--brand);
@@ -666,15 +668,21 @@ a.tile:hover { transform: translateY(-3px); box-shadow: var(--shadow-m); }
 /* --- 18. Dokumentumlista ------------------------------------------------- */
 .doclist { list-style: none; padding: 0; margin: 0; display: grid; gap: .6rem; }
 .doclist a {
-  display: flex; align-items: center; gap: .9rem; padding: .95rem 1.15rem;
+  display: flex; flex-wrap: wrap; align-items: center; gap: .45rem .9rem;
+  padding: .95rem 1.15rem;
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-s);
   text-decoration: none; color: var(--ink); font-weight: 550;
   transition: border-color .16s ease, background .16s ease, transform .16s ease;
 }
 .doclist a:hover { border-color: var(--brand); background: var(--brand-soft); transform: translateX(2px); color: var(--ink); }
 .doclist svg { width: 1.3rem; height: 1.3rem; flex: none; color: var(--brand); }
-.doclist span { flex: 1; }
-.doclist em { font-style: normal; font-size: .84rem; color: var(--ink-3); font-weight: 500; }
+/* A cím legalább 11rem-et kap; ha nem fér el mellette a típusfelirat,
+   az a következő sorba csúszik – így a cím sosem szorul keskeny hasábba. */
+.doclist span { flex: 1 1 11rem; min-width: 0; overflow-wrap: break-word; }
+.doclist em {
+  flex: 0 0 auto; margin-left: auto; font-style: normal; font-size: .84rem;
+  color: var(--ink-3); font-weight: 500;
+}
 
 /* --- 19. Összecsukható (jogszabályok, közzététel) ------------------------ */
 details.acc {

@@ -1,0 +1,69 @@
+{
+  "office_hours": "hétfő–péntek 8:30–15:00",
+  "address": "2013 Pomáz, Községház utca 2.",
+  "phone": "+36 20 234 8004",
+  "phone_alt": "+36 26 525 274",
+  "email": "szszk@szszk.pomaz.hu",
+  "units": [
+    {
+      "name": "Szociális Szolgáltatási Központ",
+      "role": "Székhely, központi ügyintézés",
+      "address": "2013 Pomáz, Községház utca 2.",
+      "phones": [
+        "+36 20 234 8004",
+        "+36 26 525 274"
+      ],
+      "email": "szszk@szszk.pomaz.hu",
+      "hours": "hétfő–péntek 8:30–15:00",
+      "icon": "building"
+    },
+    {
+      "name": "Idősek Napközbeni Ellátása",
+      "role": "Étkeztetés · Idősek Klubja · házi segítségnyújtás · jelzőrendszer · szállítás",
+      "address": "2013 Pomáz, Községház utca 2.",
+      "phones": [
+        "+36 20 234 8004",
+        "+36 26 525 274"
+      ],
+      "email": "garai.peterne@szszk.pomaz.hu",
+      "hours": "hétfő–péntek 9:00–15:00",
+      "icon": "users"
+    },
+    {
+      "name": "Idősek Átmeneti Gondozóháza",
+      "role": "Bentlakásos átmeneti elhelyezés",
+      "address": "2013 Pomáz, Községház utca 2.",
+      "phones": [
+        "+36 26 525 275",
+        "+36 20 236 0866"
+      ],
+      "email": "atmeneti@szszk.pomaz.hu",
+      "hours": "hétfő–péntek 9:00–15:00",
+      "icon": "building"
+    },
+    {
+      "name": "Család- és Gyermekjóléti Szolgálat",
+      "role": "Családsegítés, gyermekjóléti szolgáltatás",
+      "address": "2013 Pomáz, Kossuth Lajos utca 21/A",
+      "phones": [
+        "+36 20 808 7075",
+        "+36 26 322 370"
+      ],
+      "email": "csaladsegito@szszk.pomaz.hu",
+      "hours": "hétfő 13–16 · szerda 8–12 és 13–17 · péntek 8–12",
+      "icon": "hand-heart"
+    },
+    {
+      "name": "Védőnői Szolgálat",
+      "role": "Iskolavédőnői és területi védőnői ellátás",
+      "address": "2013 Pomáz, Kossuth Lajos utca 38/B",
+      "phones": [
+        "+36 26 327 244",
+        "+36 20 228 2045"
+      ],
+      "email": "vedonok@pomaz.hu",
+      "hours": "körzetenként, a Szolgálat tájékoztatása szerint",
+      "icon": "stethoscope"
+    }
+  ]
+}

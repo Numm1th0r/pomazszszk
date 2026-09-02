@@ -154,3 +154,155 @@ collections:
         label: Album leírása
         widget: markdown
         required: false
+
+  - name: adatok
+    label: Adatok
+    files:
+      - name: elerhetosegek
+        label: Elérhetőségek és nyitvatartás
+        file: content/adatok/elerhetosegek.json
+        format: json
+        description: >-
+          Ezek az adatok a fejlécben, a láblécben, a Kapcsolat oldalon és a
+          közzétételi listában is megjelennek. Elég egy helyen átírni őket.
+        fields:
+          - { name: address, label: Székhely címe, widget: string }
+          - name: phone
+            label: Fő telefonszám
+            widget: string
+            hint: "Így írd: +36 20 234 8004 — a hívható hivatkozás automatikus."
+          - { name: phone_alt, label: Másodlagos telefonszám, widget: string, required: false }
+          - { name: email, label: Központi e-mail cím, widget: string }
+          - { name: office_hours, label: Általános ügyfélfogadás, widget: string }
+          - name: units
+            label: Szervezeti egységek
+            label_singular: Egység
+            widget: list
+            summary: "{{fields.name}}"
+            fields:
+              - { name: name, label: Egység neve, widget: string }
+              - { name: role, label: Mivel foglalkozik, widget: string }
+              - { name: address, label: Cím, widget: string }
+              - name: phones
+                label: Telefonszámok
+                widget: list
+                field: { name: phone, label: Telefonszám, widget: string }
+              - { name: email, label: E-mail cím, widget: string }
+              - name: hours
+                label: Ügyfélfogadás
+                widget: string
+                hint: "Például: hétfő–péntek 9:00–15:00"
+              - name: icon
+                label: Ikon
+                widget: select
+                default: building
+                options:
+                  - { label: Épület, value: building }
+                  - { label: Közösség, value: users }
+                  - { label: Segítő kéz, value: hand-heart }
+                  - { label: Egészségügy, value: stethoscope }
+                  - { label: Otthon, value: home-heart }
+                  - { label: Jelzőkészülék, value: bell }
+                  - { label: Étkeztetés, value: soup }
+                  - { label: Szállítás, value: bus }
+
+      - name: munkatarsak
+        label: Munkatársak
+        file: content/adatok/munkatarsak.json
+        format: json
+        description: >-
+          A vezetők és az ügyfélkapcsolati munkatársak. Az Intézményünk oldalon
+          és a közzétételi listában jelennek meg.
+        fields:
+          - name: people
+            label: Munkatársak
+            label_singular: Munkatárs
+            widget: list
+            summary: "{{fields.name}} — {{fields.role}}"
+            fields:
+              - { name: name, label: Név, widget: string }
+              - { name: role, label: Beosztás, widget: string }
+              - { name: phone, label: Telefonszám, widget: string }
+              - { name: email, label: E-mail cím, widget: string }
+
+      - name: szolgaltatas_kapcsolat
+        label: Szolgáltatások kapcsolattartói
+        file: content/adatok/szolgaltatas-kapcsolat.json
+        format: json
+        description: >-
+          Az egyes szolgáltatások aloldalán, az oldalsávban megjelenő
+          elérhetőségi doboz tartalma.
+        fields:
+          - name: contacts
+            label: Szolgáltatások
+            widget: list
+            summary: "{{fields.service}} — {{fields.person}}"
+            fields:
+              - { name: slug, label: Azonosító, widget: hidden }
+              - { name: service, label: Szolgáltatás, widget: string }
+              - { name: person, label: Kapcsolattartó, widget: string }
+              - { name: address, label: Cím, widget: string }
+              - name: phones
+                label: Telefonszámok
+                widget: list
+                field: { name: phone, label: Telefonszám, widget: string }
+              - { name: email, label: E-mail cím, widget: string }
+              - name: note
+                label: Megjegyzés
+                widget: string
+                required: false
+                hint: "Például: „Időpontot telefonon és e-mailben is lehet foglalni.”"
+              - name: extra_emails
+                label: További e-mail címek
+                label_singular: E-mail cím
+                widget: list
+                required: false
+                summary: "{{fields.label}}"
+                fields:
+                  - { name: label, label: Kihez tartozik, widget: string }
+                  - { name: email, label: E-mail cím, widget: string }
+
+      - name: dokumentumok
+        label: Nyomtatványok
+        file: content/adatok/dokumentumok.json
+        format: json
+        description: >-
+          Az Ügyintézés oldal letölthető dokumentumai, csoportokba rendezve.
+        fields:
+          - name: groups
+            label: Csoportok
+            label_singular: Csoport
+            widget: list
+            summary: "{{fields.title}}"
+            fields:
+              - { name: title, label: Csoport címe, widget: string }
+              - { name: note, label: Bevezető szöveg, widget: text }
+              - name: docs
+                label: Dokumentumok
+                label_singular: Dokumentum
+                widget: list
+                required: false
+                summary: "{{fields.label}}"
+                fields:
+                  - { name: label, label: Megnevezés, widget: string }
+                  - name: kind
+                    label: Típus
+                    widget: string
+                    default: Nyomtatvány
+                    hint: "A megnevezés mellett látszó kis felirat, például „Nyomtatvány” vagy „Tájékoztató”."
+                  - name: url
+                    label: Hivatkozás
+                    widget: string
+                    hint: A dokumentum teljes webcíme (például Google Drive-link).
+              - name: checklists
+                label: Felsorolások
+                label_singular: Felsorolás
+                widget: list
+                required: false
+                summary: "{{fields.title}}"
+                fields:
+                  - { name: title, label: Felsorolás címe, widget: string }
+                  - name: items
+                    label: Tételek
+                    widget: list
+                    field: { name: item, label: Tétel, widget: string }

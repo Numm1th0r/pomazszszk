@@ -1,0 +1,94 @@
+{
+  "groups": [
+    {
+      "title": "Minden szolgáltatáshoz szükséges",
+      "note": "Étkeztetés, Idősek Klubja, házi segítségnyújtás és jelzőrendszeres házi segítségnyújtás igényléséhez mindhárom nyomtatvány kitöltése szükséges.",
+      "docs": [
+        {
+          "label": "Kérelem a személyes gondoskodást nyújtó szociális ellátás igénybevételéhez",
+          "kind": "Nyomtatvány",
+          "url": "https://drive.google.com/file/d/1GOVel61SYe6thaCh2LJZBTxxvdr3Ub53/view?usp=sharing"
+        },
+        {
+          "label": "Jövedelemnyilatkozat",
+          "kind": "Nyomtatvány",
+          "url": "https://drive.google.com/file/d/1yFeKKUYVW0b0CpkHq0GZaJaHd8Ce3kjm/view?usp=sharing"
+        },
+        {
+          "label": "Egészségi állapotra vonatkozó igazolás",
+          "kind": "Nyomtatvány",
+          "url": "https://drive.google.com/file/d/1zpR5--PD9YT5v51lb--Zaui9m8ywJdfu/view?usp=sharing"
+        }
+      ],
+      "checklists": []
+    },
+    {
+      "title": "Házi segítségnyújtáshoz külön",
+      "note": "A fenti három nyomtatványon felül kitöltendő.",
+      "docs": [
+        {
+          "label": "Értékelő lap",
+          "kind": "Nyomtatvány",
+          "url": "https://drive.google.com/file/d/1woTRKGXHAII3vcAnRNyRsx7SbRyvz6a2/view?usp=sharing"
+        }
+      ],
+      "checklists": []
+    },
+    {
+      "title": "Átmeneti Gondozóházba jelentkezéshez",
+      "note": "A kérelem, a jövedelemnyilatkozat és az egészségi állapotra vonatkozó igazolás mellett az alábbi személyes iratokat kérjük bemutatni.",
+      "docs": [],
+      "checklists": [
+        {
+          "title": "Személyes iratok",
+          "items": [
+            "Személyi igazolvány",
+            "Lakcímkártya",
+            "TAJ-kártya",
+            "A Magyar Államkincstár Nyugdíjfolyósító Igazgatóságának tárgyévi igazolása"
+          ]
+        },
+        {
+          "title": "Szükség esetén",
+          "items": [
+            "ORSZI határozat (Országos Rehabilitációs és Szociális Szakértői Intézet igazolása)",
+            "Kórházi zárójelentés",
+            "Egyéb igazolások (például pszichiátriai igazolás)"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Szolgáltatási rendek és térítési díjak",
+      "note": "Tájékoztató dokumentumok az ellátások működéséről és költségeiről.",
+      "docs": [
+        {
+          "label": "Házi segítségnyújtás – szolgáltatási rend",
+          "kind": "Tájékoztató",
+          "url": "https://drive.google.com/file/d/1FyqY_rnBrECcni3dccJG9R1qGi2YTUmq/view?usp=sharing"
+        },
+        {
+          "label": "Étkeztetés – szolgáltatási rend",
+          "kind": "Tájékoztató",
+          "url": "https://drive.google.com/file/d/1TFSxGu4bMXU3MJKhkC4bGHKSCOgbmiHr/view?usp=sharing"
+        },
+        {
+          "label": "Idősek Klubja – szolgáltatási rend",
+          "kind": "Tájékoztató",
+          "url": "https://drive.google.com/file/d/1LAO_YJr4fzYOJBQbtzYht14Mk04UQsLT/view?usp=sharing"
+        },
+        {
+          "label": "Tájékoztató a térítési díjakról",
+          "kind": "Tájékoztató",
+          "url": "https://drive.google.com/file/d/18xlE7ViJGnpXQFCF5ddl4LxwNlFTsSMc/view?usp=sharing"
+        },
+        {
+          "label": "Pomáz Város Önkormányzatának szociális rendelete",
+          "kind": "Jogszabály",
+          "url": "https://or.njt.hu/eli/731058/r/2024/6"
+        }
+      ],
+      "checklists": []
+    }
+  ]
+}

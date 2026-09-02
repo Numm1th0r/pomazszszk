@@ -11,6 +11,7 @@ szkript generálja, a GitHub pedig automatikusan közzéteszi.
 ```
 content/hirek/*.md       ← A HÍREK. Egy fájl = egy hír. Ezt szerkeszti a CMS is.
 content/galeria/*.md     ← A KÉPGALÉRIA ALBUMAI. Egy fájl = egy album.
+content/adatok/*.json    ← ELÉRHETŐSÉGEK, MUNKATÁRSAK, NYOMTATVÁNYOK (CMS-ből)
 assets/                  ← Képek, stíluslap, JavaScript (forrás)
   img/hirek/             ← A hírekhez feltöltött képek helye
   img/galeria/           ← A galéria eredeti fényképei (a build kicsinyíti)
@@ -206,6 +207,33 @@ súgószöveggel vannak beállítva a `src/admin/config.yml`-ben; ott bővíthet
 
 ---
 
+## Mit lehet a tartalomkezelőből szerkeszteni?
+
+A CMS-ben három csoport található:
+
+**Hírek** és **Képgaléria** — új bejegyzés, album, képfeltöltés.
+
+**Adatok** — négy űrlap, amely az egész honlapot érinti:
+
+| Űrlap | Mit állít | Hol jelenik meg |
+|---|---|---|
+| **Elérhetőségek és nyitvatartás** | székhely, telefonszámok, e-mail, ügyfélfogadás, és az öt szervezeti egység összes adata | fejléc, lábléc, Kapcsolat oldal, közzétételi lista, mobilmenü |
+| **Munkatársak** | vezetők és ügyfélkapcsolati kollégák neve, beosztása, telefonja, e-mailje | Intézményünk oldal, közzétételi lista |
+| **Szolgáltatások kapcsolattartói** | a nyolc szolgáltatás aloldalán az oldalsávban látható elérhetőségi doboz | szolgáltatás-aloldalak |
+| **Nyomtatványok** | az Ügyintézés oldal letölthető dokumentumai, csoportokba rendezve | Ügyintézés oldal |
+
+A telefonszámokat elég egyszerűen beírni (`+36 20 234 8004`) — a hívható
+`tel:` hivatkozást a build automatikusan előállítja belőlük.
+
+Ezek az adatok `content/adatok/*.json` fájlokban élnek. Azért JSON és nem YAML,
+mert a hosszabb szövegeket a szerkesztő többsoros blokként írná ki, amit a
+projekt saját, függőségmentes értelmezője félreolvasna; JSON-nál ez a kockázat
+nem áll fenn.
+
+> A `src/checklinks.py` minden buildnél ellenőrzi, hogy a `config.yml` érvényes
+> YAML-e és minden hivatkozott adatfájl létezik-e. Egy elrontott beállítás így
+> nem juthat élesbe — a GitHub Action megbukik előtte.
+
 ## Biztonság — miért nem rés a tartalomkezelő?
 
 Az `/admin/` oldal **statikus HTML és JavaScript, nem tartalmaz jelszót vagy
@@ -246,6 +274,9 @@ Az idős látogatókra tervezve:
 - „Ugrás a tartalomra” link, látható fókuszjelölés, morzsamenü, teljes
   billentyűzetes kezelhetőség.
 - Kattintható telefonszámok (`tel:`) és e-mail címek.
+- A stíluslap és a szkript tartalom-lenyomatos verziószámot kap (`?v=...`),
+  így egy frissítés után a böngésző soha nem párosít friss HTML-t régi,
+  gyorsítótárazott stíluslappal.
 - A képnézegető billentyűzetről is kezelhető (nyilak, `Esc`), a fókusz nem
   szökik ki belőle, és minden fényképnek van szöveges leírása.
 - Mobilbarát: 320 px-től felfelé egyetlen oldalon sincs vízszintes görgetés

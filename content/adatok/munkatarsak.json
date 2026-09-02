@@ -1,0 +1,40 @@
+{
+  "people": [
+    {
+      "name": "dr. Király Eszter",
+      "role": "intézményvezető",
+      "phone": "+36 20 234 8004",
+      "email": "szszk@szszk.pomaz.hu"
+    },
+    {
+      "name": "Garai Péterné",
+      "role": "intézményvezető-helyettes, az Idősek Napközbeni Ellátása csoport vezetője",
+      "phone": "+36 20 225 9114",
+      "email": "garai.peterne@szszk.pomaz.hu"
+    },
+    {
+      "name": "Majoros Ferencné",
+      "role": "az Idősek Átmeneti Gondozóháza csoportvezetője",
+      "phone": "+36 20 236 0866",
+      "email": "atmeneti@szszk.pomaz.hu"
+    },
+    {
+      "name": "Benczik Orsolya",
+      "role": "a Család- és Gyermekjóléti Szolgálat tagintézmény-vezetője",
+      "phone": "+36 20 541 8914",
+      "email": "csaladsegito@szszk.pomaz.hu"
+    },
+    {
+      "name": "Letonai Gabriella",
+      "role": "a házi segítségnyújtás és a jelzőrendszeres segítségnyújtás szakmai vezetője",
+      "phone": "+36 20 234 8004",
+      "email": "letonai.gabriella@szszk.pomaz.hu"
+    },
+    {
+      "name": "dr. Temesiné Estermann Andrea",
+      "role": "iskolavédőnő",
+      "phone": "+36 20 228 2045",
+      "email": "vedonok@pomaz.hu"
+    }
+  ]
+}

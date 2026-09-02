@@ -7,12 +7,36 @@ A tartalom szerkesztéséhez elég ezt a fájlt módosítani, majd újra
 lefuttatni a build.py-t.
 """
 
+import json
 import os
 import re
 
 from markdown_mini import plain_text, render, split_front_matter
 
 _ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+_DATA = os.path.join(_ROOT, "content", "adatok")
+
+
+def _load(name):
+    """A tartalomkezelőből szerkeszthető adatfájlok beolvasása."""
+    path = os.path.join(_DATA, name)
+    if not os.path.isfile(path):
+        return {}
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)
+
+
+def _tel(label):
+    """„+36 20 234 8004” -> „tel:+36202348004” (hívható hivatkozás)."""
+    return "tel:" + re.sub(r"[^\d+]", "", str(label))
+
+
+def _phones(items):
+    """Telefonszámok listája (label, href) párokká alakítva."""
+    return [(str(p).strip(), _tel(p)) for p in (items or []) if str(p).strip()]
+
+
+_ELERHETOSEG = _load("elerhetosegek.json")
 
 SITE = {
     "name": "Szociális Szolgáltatási Központ",
@@ -21,13 +45,13 @@ SITE = {
     "description": "A pomázi Szociális Szolgáltatási Központ étkeztetést, házi segítségnyújtást, "
                    "jelzőrendszeres segítséget, idősek klubját, átmeneti gondozóházat, család- és "
                    "gyermekjóléti szolgálatot, valamint iskolavédőnői ellátást biztosít Pomáz és Csobánka lakóinak.",
-    "address": "2013 Pomáz, Községház utca 2.",
-    "phone": "+36 20 234 8004",
-    "phone_href": "tel:+36202348004",
-    "phone_alt": "+36 26 525 274",
-    "phone_alt_href": "tel:+3626525274",
-    "email": "szszk@szszk.pomaz.hu",
-    "office_hours": "hétfő–péntek 8:30–15:00",
+    "address": _ELERHETOSEG.get("address", ""),
+    "phone": _ELERHETOSEG.get("phone", ""),
+    "phone_href": _tel(_ELERHETOSEG.get("phone", "")),
+    "phone_alt": _ELERHETOSEG.get("phone_alt", ""),
+    "phone_alt_href": _tel(_ELERHETOSEG.get("phone_alt", "")),
+    "email": _ELERHETOSEG.get("email", ""),
+    "office_hours": _ELERHETOSEG.get("office_hours", ""),
     "director": "dr. Király Eszter",
     # A honlap saját címe (a sitemap, az RSS és a közzétételi lista használja).
     # Ha a pomazszszk.hu domain az ÚJ oldalra mutat, ide írd: https://pomazszszk.hu
@@ -560,119 +584,43 @@ def load_gallery(folder=None):
 GALLERY = load_gallery()
 
 # --- Dokumentumok ---------------------------------------------------------
+# Szerkeszthető: content/adatok/dokumentumok.json (tartalomkezelő: „Nyomtatványok”)
+
 DOC_GROUPS = [
     {
-        "title": "Minden szolgáltatáshoz szükséges",
-        "note": "Étkeztetés, Idősek Klubja, házi segítségnyújtás és jelzőrendszeres házi segítségnyújtás "
-                "igényléséhez mindhárom nyomtatvány kitöltése szükséges.",
-        "docs": [
-            ("Kérelem a személyes gondoskodást nyújtó szociális ellátás igénybevételéhez", "Nyomtatvány",
-             "https://drive.google.com/file/d/1GOVel61SYe6thaCh2LJZBTxxvdr3Ub53/view?usp=sharing"),
-            ("Jövedelemnyilatkozat", "Nyomtatvány",
-             "https://drive.google.com/file/d/1yFeKKUYVW0b0CpkHq0GZaJaHd8Ce3kjm/view?usp=sharing"),
-            ("Egészségi állapotra vonatkozó igazolás", "Nyomtatvány",
-             "https://drive.google.com/file/d/1zpR5--PD9YT5v51lb--Zaui9m8ywJdfu/view?usp=sharing"),
-        ],
-    },
-    {
-        "title": "Házi segítségnyújtáshoz külön",
-        "note": "A fenti három nyomtatványon felül kitöltendő.",
-        "docs": [
-            ("Értékelő lap", "Nyomtatvány",
-             "https://drive.google.com/file/d/1woTRKGXHAII3vcAnRNyRsx7SbRyvz6a2/view?usp=sharing"),
-        ],
-    },
-    {
-        "title": "Átmeneti Gondozóházba jelentkezéshez",
-        "note": "A kérelem, a jövedelemnyilatkozat és az egészségi állapotra vonatkozó igazolás mellett "
-                "az alábbi személyes iratokat kérjük bemutatni.",
-        "docs": [],
-        "list": {
-            "Személyes iratok": ["Személyi igazolvány", "Lakcímkártya", "TAJ-kártya",
-                                 "A Magyar Államkincstár Nyugdíjfolyósító Igazgatóságának tárgyévi igazolása"],
-            "Szükség esetén": ["ORSZI határozat (Országos Rehabilitációs és Szociális Szakértői Intézet igazolása)",
-                               "Kórházi zárójelentés", "Egyéb igazolások (például pszichiátriai igazolás)"],
-        },
-    },
-    {
-        "title": "Szolgáltatási rendek és térítési díjak",
-        "note": "Tájékoztató dokumentumok az ellátások működéséről és költségeiről.",
-        "docs": [
-            ("Házi segítségnyújtás – szolgáltatási rend", "Tájékoztató",
-             "https://drive.google.com/file/d/1FyqY_rnBrECcni3dccJG9R1qGi2YTUmq/view?usp=sharing"),
-            ("Étkeztetés – szolgáltatási rend", "Tájékoztató",
-             "https://drive.google.com/file/d/1TFSxGu4bMXU3MJKhkC4bGHKSCOgbmiHr/view?usp=sharing"),
-            ("Idősek Klubja – szolgáltatási rend", "Tájékoztató",
-             "https://drive.google.com/file/d/1LAO_YJr4fzYOJBQbtzYht14Mk04UQsLT/view?usp=sharing"),
-            ("Tájékoztató a térítési díjakról", "Tájékoztató",
-             "https://drive.google.com/file/d/18xlE7ViJGnpXQFCF5ddl4LxwNlFTsSMc/view?usp=sharing"),
-            ("Pomáz Város Önkormányzatának szociális rendelete", "Jogszabály",
-             "https://or.njt.hu/eli/731058/r/2024/6"),
-        ],
-    },
+        "title": g.get("title", ""),
+        "note": g.get("note", ""),
+        "docs": [(d.get("label", ""), d.get("kind", ""), d.get("url", ""))
+                 for d in g.get("docs", []) if d.get("label")],
+        "list": {c.get("title", ""): c.get("items", [])
+                 for c in g.get("checklists", []) if c.get("title")},
+    }
+    for g in _load("dokumentumok.json").get("groups", [])
 ]
 
 # --- Elérhetőségek --------------------------------------------------------
+# Szerkeszthető: content/adatok/elerhetosegek.json (tartalomkezelő: „Elérhetőségek”)
+
 CONTACT_UNITS = [
     {
-        "name": "Szociális Szolgáltatási Központ",
-        "role": "Székhely, központi ügyintézés",
-        "address": "2013 Pomáz, Községház utca 2.",
-        "phones": [("+36 20 234 8004", "tel:+36202348004"), ("+36 26 525 274", "tel:+3626525274")],
-        "email": "szszk@szszk.pomaz.hu",
-        "hours": "hétfő–péntek 8:30–15:00",
-        "icon": "building",
-    },
-    {
-        "name": "Idősek Napközbeni Ellátása",
-        "role": "Étkeztetés · Idősek Klubja · házi segítségnyújtás · jelzőrendszer · szállítás",
-        "address": "2013 Pomáz, Községház utca 2.",
-        "phones": [("+36 20 234 8004", "tel:+36202348004"), ("+36 26 525 274", "tel:+3626525274")],
-        "email": "garai.peterne@szszk.pomaz.hu",
-        "hours": "hétfő–péntek 9:00–15:00",
-        "icon": "users",
-    },
-    {
-        "name": "Idősek Átmeneti Gondozóháza",
-        "role": "Bentlakásos átmeneti elhelyezés",
-        "address": "2013 Pomáz, Községház utca 2.",
-        "phones": [("+36 26 525 275", "tel:+3626525275"), ("+36 20 236 0866", "tel:+36202360866")],
-        "email": "atmeneti@szszk.pomaz.hu",
-        "hours": "hétfő–péntek 9:00–15:00",
-        "icon": "building",
-    },
-    {
-        "name": "Család- és Gyermekjóléti Szolgálat",
-        "role": "Családsegítés, gyermekjóléti szolgáltatás",
-        "address": "2013 Pomáz, Kossuth Lajos utca 21/A",
-        "phones": [("+36 20 808 7075", "tel:+36208087075"), ("+36 26 322 370", "tel:+3626322370")],
-        "email": "csaladsegito@szszk.pomaz.hu",
-        "hours": "hétfő 13–16 · szerda 8–12 és 13–17 · péntek 8–12",
-        "icon": "hand-heart",
-    },
-    {
-        "name": "Védőnői Szolgálat",
-        "role": "Iskolavédőnői és területi védőnői ellátás",
-        "address": "2013 Pomáz, Kossuth Lajos utca 38/B",
-        "phones": [("+36 26 327 244", "tel:+3626327244"), ("+36 20 228 2045", "tel:+36202282045")],
-        "email": "vedonok@pomaz.hu",
-        "hours": "körzetenként, a Szolgálat tájékoztatása szerint",
-        "icon": "stethoscope",
-    },
+        "name": u.get("name", ""),
+        "role": u.get("role", ""),
+        "address": u.get("address", ""),
+        "phones": _phones(u.get("phones")),
+        "email": u.get("email", ""),
+        "hours": u.get("hours", ""),
+        "icon": u.get("icon") or "building",
+    }
+    for u in _ELERHETOSEG.get("units", []) if u.get("name")
 ]
 
+# --- Munkatársak ----------------------------------------------------------
+# Szerkeszthető: content/adatok/munkatarsak.json (tartalomkezelő: „Munkatársak”)
+
 LEADERS = [
-    ("dr. Király Eszter", "intézményvezető", "+36 20 234 8004", "tel:+36202348004", "szszk@szszk.pomaz.hu"),
-    ("Garai Péterné", "intézményvezető-helyettes, az Idősek Napközbeni Ellátása csoport vezetője",
-     "+36 20 225 9114", "tel:+36202259114", "garai.peterne@szszk.pomaz.hu"),
-    ("Majoros Ferencné", "az Idősek Átmeneti Gondozóháza csoportvezetője",
-     "+36 20 236 0866", "tel:+36202360866", "atmeneti@szszk.pomaz.hu"),
-    ("Benczik Orsolya", "a Család- és Gyermekjóléti Szolgálat tagintézmény-vezetője",
-     "+36 20 541 8914", "tel:+36205418914", "csaladsegito@szszk.pomaz.hu"),
-    ("Letonai Gabriella", "a házi segítségnyújtás és a jelzőrendszeres segítségnyújtás szakmai vezetője",
-     "+36 20 234 8004", "tel:+36202348004", "letonai.gabriella@szszk.pomaz.hu"),
-    ("dr. Temesiné Estermann Andrea", "iskolavédőnő",
-     "+36 20 228 2045", "tel:+36202282045", "vedonok@pomaz.hu"),
+    (p.get("name", ""), p.get("role", ""), p.get("phone", ""),
+     _tel(p.get("phone", "")), p.get("email", ""))
+    for p in _load("munkatarsak.json").get("people", []) if p.get("name")
 ]
 
 # --- Jogszabályok ---------------------------------------------------------
@@ -747,3 +695,25 @@ USEFUL_LINKS = [
      "https://kormanyhivatalok.hu/kormanyhivatalok/pest"),
     ("Nemzeti Jogszabálytár", "Hatályos jogszabályok és önkormányzati rendeletek", "https://njt.hu"),
 ]
+
+
+# --- A szolgáltatások kapcsolattartói ------------------------------------
+# Szerkeszthető: content/adatok/szolgaltatas-kapcsolat.json
+# (tartalomkezelő: „Szolgáltatások kapcsolattartói”)
+
+_SVC_CONTACT = {c["slug"]: c for c in
+                _load("szolgaltatas-kapcsolat.json").get("contacts", []) if c.get("slug")}
+
+for _s in SERVICES:
+    _c = _SVC_CONTACT.get(_s["slug"])
+    if not _c:
+        continue
+    _s["contact"] = {
+        "person": _c.get("person", ""),
+        "address": _c.get("address", ""),
+        "phones": _phones(_c.get("phones")),
+        "email": _c.get("email", ""),
+        "note": _c.get("note", ""),
+        "extra_emails": [(e.get("label", ""), e.get("email", ""))
+                         for e in _c.get("extra_emails", []) if e.get("email")],
+    }

@@ -30,6 +30,26 @@ ADMIN = os.path.join(ROOT, "src", "admin")     # forrás: a szerkesztőfelület
 
 SINGLE_FILE = "--artifact" in sys.argv
 
+
+def asset_version():
+    """Rövid tartalom-lenyomat a style.css + app.js fájlokból.
+
+    Ez kerül a hivatkozások végére (?v=...), hogy egy új változat után a
+    böngésző soha ne párosíthasson friss HTML-t régi, gyorsítótárazott
+    stíluslappal. A GitHub Pages 10 percig tárolja az eszközöket.
+    """
+    import hashlib
+    h = hashlib.sha1()
+    for name in ("style.css", "app.js"):
+        path = os.path.join(ROOT, "assets", name)
+        if os.path.isfile(path):
+            with open(path, "rb") as f:
+                h.update(f.read())
+    return h.hexdigest()[:8]
+
+
+ASSET_V = asset_version()
+
 # =============================================================================
 # Segédfüggvények
 # =============================================================================
@@ -121,9 +141,11 @@ def masthead(depth, active):
         </div>
       </div>
     </nav>
+    <!-- A sötétítő rétegnek a fejléc rétegkontextusán BELÜL kell lennie,
+         különben a fölé kerül a menüfióknak (a .masthead z-index-e miatt). -->
+    <div class="nav-scrim" data-nav-scrim></div>
   </div>
-</header>
-<div class="nav-scrim" data-nav-scrim></div>"""
+</header>"""
 
 
 def footer(depth):
@@ -222,7 +244,7 @@ def layout(page):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='13' fill='%231d5b4f'/%3E%3Cpath d='M24 31.4s-5.1-3.3-5.1-6.3a2.9 2.9 0 0 1 5.1-1.9 2.9 2.9 0 0 1 5.1 1.9c0 3-5.1 6.3-5.1 6.3Z' fill='%23e08e5a'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="{a}assets/style.css">
+<link rel="stylesheet" href="{a}assets/style.css?v={ASSET_V}">
 <script>
 /* A mentett megjelenítési beállítások alkalmazása még az első kirajzolás előtt. */
 (function(){{try{{var p=JSON.parse(localStorage.getItem("szszk-prefs"))||{{}},r=document.documentElement;
@@ -238,7 +260,7 @@ if(p.contrast==="high")r.setAttribute("data-contrast","high");}}catch(e){{}}}})(
 {page["body"]}
 </main>
 {footer(depth)}
-<script src="{a}assets/app.js"></script>
+<script src="{a}assets/app.js?v={ASSET_V}"></script>
 </body>
 </html>
 """
