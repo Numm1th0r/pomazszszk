@@ -1,0 +1,9 @@
+# A honlap a forrásból épül — a GitHub Action generálja publikáláskor.
+site/
+
+# Az egyfájlos előnézet (3 MB, beágyazott képekkel) — nem kell a tárolóba.
+artifact.html
+
+# Python
+__pycache__/
+*.py[cod]

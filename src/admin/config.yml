@@ -1,0 +1,93 @@
+# Tartalomkezelő beállításai (Sveltia CMS / Decap CMS)
+# A "repo" értékét a build.py automatikusan kitölti a git távoli tárolóból.
+
+backend:
+  name: github
+  repo: __REPO__
+  branch: main
+
+site_url: https://pomazszszk.hu
+display_url: https://pomazszszk.hu
+locale: hu
+publish_mode: simple
+
+# A feltöltött képek helye a tárolóban, illetve a honlapon
+media_folder: "assets/img/hirek"
+public_folder: "/assets/img/hirek"
+
+collections:
+  - name: hirek
+    label: Hírek
+    label_singular: Hír
+    description: >-
+      Egy hír = egy bejegyzés. Mentés után a honlap 1–2 percen belül
+      automatikusan frissül.
+    folder: content/hirek
+    create: true
+    delete: true
+    extension: md
+    format: yaml-frontmatter
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{date}} — {{title}}"
+    sortable_fields: [date, title]
+    view_filters:
+      - label: Kiemelt hírek
+        field: highlight
+        pattern: true
+    fields:
+      - name: title
+        label: Cím
+        widget: string
+        hint: Ez jelenik meg a hírlistában és a hír saját oldalának tetején.
+
+      - name: date
+        label: Dátum
+        widget: datetime
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        format: "YYYY-MM-DD"
+        hint: A hírek dátum szerint, a legfrissebbel kezdve jelennek meg.
+
+      - name: excerpt
+        label: Kivonat
+        widget: text
+        hint: >-
+          1–2 mondat, ez látszik a hírlistában és a főoldalon. Ha üresen hagyod,
+          a szöveg eleje kerül ide.
+        required: false
+
+      - name: image
+        label: Borítókép
+        widget: image
+        required: false
+        hint: Nem kötelező. Fekvő tájolású kép a legszebb.
+
+      - name: image_alt
+        label: Kép rövid leírása
+        widget: string
+        required: false
+        hint: >-
+          Látássérült látogatóknak és a felolvasóprogramoknak szól.
+          Például „Adventi koszorúk az asztalon”.
+
+      - name: highlight
+        label: Kiemelt hír („Fontos” címkével)
+        widget: boolean
+        default: false
+        required: false
+
+      - name: link_label
+        label: Gomb felirata (nem kötelező)
+        widget: string
+        required: false
+        hint: Például „Képek a galériában”.
+
+      - name: link_href
+        label: Gomb hivatkozása (nem kötelező)
+        widget: string
+        required: false
+        hint: Például kepgaleria.html vagy https://…
+
+      - name: body
+        label: A hír szövege
+        widget: markdown
