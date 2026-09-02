@@ -7,4 +7,5 @@ photos:
   - /assets/img/galeria/2024-december.jpg
   - /assets/img/galeria/idosek-vilagnapja-2025.jpg
   - /assets/img/galeria/majalis-2025.jpg
+  - /assets/img/galeria/idosek-vilagnapja-2025.jpg
 ---
