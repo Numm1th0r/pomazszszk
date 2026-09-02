@@ -163,7 +163,9 @@ súgószöveggel vannak beállítva a `src/admin/config.yml`-ben; ott bővíthet
 Az idős látogatókra tervezve:
 
 - **Betűméret-váltó** a fejlécben (alap / nagyobb / legnagyobb), böngészőben megjegyezve.
-- **Nagy kontrasztú mód** és **sötét mód**, a rendszerbeállítás automatikus követésével.
+- **Nagy kontrasztú mód** (fekete-fehér, árnyék nélkül) a gyengénlátóknak.
+- A honlap szándékosan **csak világos módban** jelenik meg, a rendszer sötét
+  beállítása mellett is — így a megjelenés mindenkinél azonos és kiszámítható.
 - Kb. 17 px-es alap betűméret, 1.68-as sorköz, nagy kattintható felületek.
 - „Ugrás a tartalomra” link, látható fókuszjelölés, morzsamenü, teljes
   billentyűzetes kezelhetőség.

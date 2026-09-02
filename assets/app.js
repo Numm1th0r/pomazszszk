@@ -23,9 +23,6 @@
     if (prefs.contrast === "high") root.setAttribute("data-contrast", "high");
     else root.removeAttribute("data-contrast");
 
-    if (prefs.theme === "dark" || prefs.theme === "light") root.setAttribute("data-theme", prefs.theme);
-    else root.removeAttribute("data-theme");
-
     syncButtons();
   }
 
@@ -36,12 +33,6 @@
     });
     document.querySelectorAll("[data-contrast-btn]").forEach(function (b) {
       b.setAttribute("aria-pressed", String(prefs.contrast === "high"));
-    });
-    document.querySelectorAll("[data-theme-btn]").forEach(function (b) {
-      var dark = prefs.theme === "dark";
-      b.setAttribute("aria-pressed", String(dark));
-      var lbl = b.querySelector("[data-theme-label]");
-      if (lbl) lbl.textContent = dark ? "Világos" : "Sötét";
     });
   }
 
@@ -54,11 +45,6 @@
     var contrastBtn = e.target.closest("[data-contrast-btn]");
     if (contrastBtn) {
       prefs.contrast = prefs.contrast === "high" ? "normal" : "high";
-      writePrefs(prefs); apply(prefs); return;
-    }
-    var themeBtn = e.target.closest("[data-theme-btn]");
-    if (themeBtn) {
-      prefs.theme = prefs.theme === "dark" ? "light" : "dark";
       writePrefs(prefs); apply(prefs); return;
     }
   });

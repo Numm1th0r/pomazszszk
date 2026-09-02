@@ -77,7 +77,6 @@ def utility_bar(depth):
       <button type="button" data-textsize-btn="l" aria-pressed="false" title="Nagyobb betűméret"><span class="a11y__a-md" aria-hidden="true">A</span><span class="visually-hidden">Nagyobb betűméret</span></button>
       <button type="button" data-textsize-btn="xl" aria-pressed="false" title="Legnagyobb betűméret"><span class="a11y__a-lg" aria-hidden="true">A</span><span class="visually-hidden">Legnagyobb betűméret</span></button>
       <button type="button" data-contrast-btn aria-pressed="false" title="Nagy kontrasztú megjelenítés">Kontraszt</button>
-      <button type="button" data-theme-btn aria-pressed="false" title="Sötét és világos megjelenítés váltása"><span data-theme-label>Sötét</span></button>
     </div>
   </div>
 </div>"""
@@ -215,8 +214,7 @@ def layout(page):
 /* A mentett megjelenítési beállítások alkalmazása még az első kirajzolás előtt. */
 (function(){{try{{var p=JSON.parse(localStorage.getItem("szszk-prefs"))||{{}},r=document.documentElement;
 if(p.textsize&&p.textsize!=="m")r.setAttribute("data-textsize",p.textsize);
-if(p.contrast==="high")r.setAttribute("data-contrast","high");
-if(p.theme==="dark"||p.theme==="light")r.setAttribute("data-theme",p.theme);}}catch(e){{}}}})();
+if(p.contrast==="high")r.setAttribute("data-contrast","high");}}catch(e){{}}}})();
 </script>
 </head>
 <body>

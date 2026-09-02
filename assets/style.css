@@ -3,9 +3,13 @@
    Akadálymentesség-központú, meleg tónusú, letisztult design.
    ========================================================================== */
 
-/* --- 1. Design tokenek ---------------------------------------------------- */
+/* --- 1. Design tokenek ----------------------------------------------------
+   A honlap szándékosan csak világos módban jelenik meg: a paletta meleg,
+   papírszerű alaphoz és mély zöldhöz igazodik. A látássérült látogatóknak a
+   nagy kontrasztú mód és a betűméret-váltó áll rendelkezésre.
+   -------------------------------------------------------------------------- */
 :root {
-  color-scheme: light;
+  color-scheme: light only;
 
   --bg:          #faf7f2;
   --bg-tint:     #f3eee5;
@@ -44,66 +48,6 @@
   --gutter: clamp(1.15rem, 4vw, 2.75rem);
 
   --root-size: 106.25%; /* ≈17px alap — idősbarát olvasásméret */
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --bg:          #131210;
-    --bg-tint:     #1a1815;
-    --surface:     #1c1a16;
-    --surface-2:   #232019;
-    --ink:         #f3eee5;
-    --ink-2:       #b9b0a1;
-    --ink-3:       #948b7c;
-    --line:        #332f27;
-    --line-strong: #4a453a;
-
-    --brand:       #6fbca8;
-    --brand-deep:  #a3d8c8;
-    --brand-soft:  #1b302b;
-    --brand-ring:  #6fbca855;
-  --on-brand:    #0d1f1b;
-    --on-brand:    #0d1f1b;
-
-    --accent:      #e29264;
-    --accent-soft: #2e2119;
-
-    --danger:      #f0a0a0;
-    --danger-soft: #2e1a1a;
-
-    --shadow-s: 0 1px 2px rgba(0,0,0,.4);
-    --shadow-m: 0 2px 4px rgba(0,0,0,.35), 0 12px 32px rgba(0,0,0,.45);
-    --shadow-l: 0 8px 20px rgba(0,0,0,.4), 0 28px 60px rgba(0,0,0,.55);
-  }
-}
-
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --bg:          #131210;
-  --bg-tint:     #1a1815;
-  --surface:     #1c1a16;
-  --surface-2:   #232019;
-  --ink:         #f3eee5;
-  --ink-2:       #b9b0a1;
-  --ink-3:       #948b7c;
-  --line:        #332f27;
-  --line-strong: #4a453a;
-
-  --brand:       #6fbca8;
-  --brand-deep:  #a3d8c8;
-  --brand-soft:  #1b302b;
-  --brand-ring:  #6fbca855;
-
-  --accent:      #e29264;
-  --accent-soft: #2e2119;
-
-  --danger:      #f0a0a0;
-  --danger-soft: #2e1a1a;
-
-  --shadow-s: 0 1px 2px rgba(0,0,0,.4);
-  --shadow-m: 0 2px 4px rgba(0,0,0,.35), 0 12px 32px rgba(0,0,0,.45);
-  --shadow-l: 0 8px 20px rgba(0,0,0,.4), 0 28px 60px rgba(0,0,0,.55);
 }
 
 /* Betűméret-fokozatok (akadálymentesítő sáv) */
@@ -421,7 +365,6 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
 .tag svg { width: 1em; height: 1em; flex: none; opacity: .7; }
 .tag--free { background: var(--brand-soft); color: var(--brand-deep); border-color: transparent; }
 .tag--fee  { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
-:root[data-theme="dark"] .tag--free { color: var(--brand-deep); }
 
 /* Ikonos "hasáb" kártya kép nélkül */
 .tile {
