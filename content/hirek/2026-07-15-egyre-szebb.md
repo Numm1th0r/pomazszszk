@@ -4,7 +4,7 @@ date: 2026-07-15
 excerpt: Halad a felújítás – az új padló és a friss falak már a helyükön. Hamarosan birtokba vehetik a klubtagok.
 image: klub-felujitas.jpg
 image_alt: A felújítás alatt álló klubhelyiség új padlóval
-highlight: true
+highlight: false
 link_label: ''
 link_href: ''
 ---
