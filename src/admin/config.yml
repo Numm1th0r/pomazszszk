@@ -6,8 +6,8 @@ backend:
   repo: __REPO__
   branch: main
 
-site_url: https://pomazszszk.hu
-display_url: https://pomazszszk.hu
+site_url: https://numm1th0r.github.io/pomazszszk
+display_url: https://numm1th0r.github.io/pomazszszk
 locale: hu
 publish_mode: simple
 
@@ -154,14 +154,6 @@ collections:
             widget: string
             required: false
             hint: Nem kötelező, de segít a látássérült látogatóknak.
-
-      - name: external_url
-        label: Régi galéria hivatkozása
-        widget: string
-        required: false
-        hint: >-
-          Csak a korábbi honlapról átvett albumoknál kell. Ha nincs feltöltött
-          fénykép, a borítóra kattintva ide jut a látogató.
 
       - name: body
         label: Album leírása

@@ -107,6 +107,19 @@ def masthead(depth, active):
         {''.join(items)}
         <li><a class="nav__cta" href="{rel(NAV_CTA[1], depth)}"{cta_cur}>{esc(NAV_CTA[0])}</a></li>
       </ul>
+      <div class="nav__extra">
+        <p class="nav__extra-title">Elérhetőség</p>
+        <p class="nav__extra-line">{icon("phone")}<a href="{SITE['phone_href']}">{esc(SITE['phone'])}</a></p>
+        <p class="nav__extra-line">{icon("mail")}<a href="mailto:{SITE['email']}">{esc(SITE['email'])}</a></p>
+        <p class="nav__extra-line">{icon("clock")}<span>{esc(SITE['office_hours'])}</span></p>
+        <p class="nav__extra-title">Megjelenítés</p>
+        <div class="a11y a11y--drawer" role="group" aria-label="Megjelenítési beállítások">
+          <button type="button" data-textsize-btn="m" aria-pressed="true" title="Alap betűméret"><span class="a11y__a-sm" aria-hidden="true">A</span><span class="visually-hidden">Alap betűméret</span></button>
+          <button type="button" data-textsize-btn="l" aria-pressed="false" title="Nagyobb betűméret"><span class="a11y__a-md" aria-hidden="true">A</span><span class="visually-hidden">Nagyobb betűméret</span></button>
+          <button type="button" data-textsize-btn="xl" aria-pressed="false" title="Legnagyobb betűméret"><span class="a11y__a-lg" aria-hidden="true">A</span><span class="visually-hidden">Legnagyobb betűméret</span></button>
+          <button type="button" data-contrast-btn aria-pressed="false" title="Nagy kontrasztú megjelenítés">Kontraszt</button>
+        </div>
+      </div>
     </nav>
   </div>
 </header>
@@ -937,11 +950,7 @@ def gallery_asset(name, kind, depth):
 
 
 def album_href(album, depth):
-    if album["photos"]:
-        return rel(f"kepgaleria/{album['slug']}.html", depth), False
-    if album["external_url"]:
-        return album["external_url"], True
-    return rel(f"kepgaleria/{album['slug']}.html", depth), False
+    return rel(f"kepgaleria/{album['slug']}.html", depth)
 
 
 def page_album(album):
@@ -964,15 +973,10 @@ def page_album(album):
         grid = ""
         note = f"""
     <div class="note note--brand">{icon('info')}
-      <p>Ebbe az albumba még nem töltöttünk fel képeket.
-      {'A korábbi galéria a régi honlapunkon érhető el.' if album['external_url'] else ''}</p>
+      <p>Ebbe az albumba még nem töltöttünk fel képeket. Nézzen vissza hamarosan!</p>
     </div>"""
 
     outlink = ""
-    if album["external_url"]:
-        outlink = (f'<div class="btn-row" style="margin-top:2rem">'
-                   f'<a class="btn btn--ghost" href="{album["external_url"]}" target="_blank" rel="noopener">'
-                   f'Korábbi galéria a régi honlapon {icon("external")}</a></div>')
 
     lead = f"{album['year']} · {len(photos)} kép" if photos else album["year"]
     body = pagehead(esc(album["title"]), lead,
@@ -999,16 +1003,16 @@ def page_kepgaleria():
     d = 0
     cards = []
     for a in GALLERY:
-        href, external = album_href(a, d)
+        href = album_href(a, d)
         count = len(a["photos"])
-        meta = f"{count} kép" if count else ("régi galéria" if a["external_url"] else "hamarosan")
+        meta = f"{count} kép" if count else "hamarosan"
         cards.append(f"""
-    <a class="gallery__card" href="{href}"{link_attrs(href) if external else ''}>
+    <a class="gallery__card" href="{href}">
       <span class="gallery__media"><img src="{gallery_asset(a['cover'], 'thumb', d)}"
         alt="{esc(a['title'])} – {esc(a['year'])}" loading="lazy" width="640" height="480"></span>
       <span class="gallery__label">
         <span class="gallery__name">{esc(a['title'])}</span>
-        <span class="gallery__meta">{esc(a['year'])} · {esc(meta)}{' ↗' if external else ''}</span>
+        <span class="gallery__meta">{esc(a['year'])} · {esc(meta)}</span>
       </span>
     </a>""")
 
@@ -1018,8 +1022,7 @@ def page_kepgaleria():
   <div class="container">
     <div class="note note--brand" style="margin-bottom:2rem">
       {icon('info')}
-      <p>A gyermekekről az adatvédelmi előírások betartása miatt nem teszünk közzé fényképeket.
-      A ↗ jellel jelölt albumok képei még a korábbi honlapunkon érhetők el.</p>
+      <p>A gyermekekről az adatvédelmi előírások betartása miatt nem teszünk közzé fényképeket.</p>
     </div>
     <div class="gallery">{''.join(cards)}</div>
   </div>
@@ -1308,9 +1311,30 @@ def copy_assets():
     open(os.path.join(OUT, ".nojekyll"), "w").close()
 
 
+def clean_output(pages):
+    """A már nem generált HTML-fájlok törlése a kimenetből.
+
+    Enélkül egy átnevezett vagy törölt hír/album régi oldala kint maradna.
+    """
+    keep = {os.path.normpath(os.path.join(OUT, p["path"])) for p in pages}
+    keep.add(os.path.normpath(os.path.join(OUT, "admin", "index.html")))
+    removed = 0
+    for root, _dirs, files in os.walk(OUT):
+        for name in files:
+            if not name.endswith(".html"):
+                continue
+            path = os.path.normpath(os.path.join(root, name))
+            if path not in keep:
+                os.remove(path)
+                removed += 1
+    if removed:
+        print("  %d elavult oldal törölve a kimenetből." % removed)
+
+
 def write_multipage(pages):
     os.makedirs(OUT, exist_ok=True)
     copy_assets()
+    clean_output(pages)
     build_gallery_images(GALLERY)
     for p in pages:
         dest = os.path.join(OUT, p["path"])

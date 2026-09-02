@@ -92,15 +92,12 @@ photos:
   - image: /assets/img/galeria/advent-01.jpg
     caption: Koszorúkészítés
   - image: /assets/img/galeria/advent-02.jpg
-external_url: https://pomazszszk.hu/kepgaleria/regi-album/
 ---
 ```
 
 - **`photos`** — a fényképek listája. A `caption` nem kötelező, de segít a
   látássérült látogatóknak (ha nincs, automatikus leírás készül).
 - **`cover`** — a galéria főoldalán látszó borító. Ha üres, az első fénykép lesz az.
-- **`external_url`** — csak a régi honlapról átvett albumoknál. Ha az albumban
-  nincs feltöltött fénykép, a borító erre a címre visz.
 
 **A képek méretezése automatikus.** Az eredeti fájlok az `assets/img/galeria/`
 mappában maradnak (akár telefonnal készült, több megabájtos fotók), a build
@@ -244,8 +241,10 @@ Az idős látogatókra tervezve:
 - Kattintható telefonszámok (`tel:`) és e-mail címek.
 - A képnézegető billentyűzetről is kezelhető (nyilak, `Esc`), a fókusz nem
   szökik ki belőle, és minden fényképnek van szöveges leírása.
-- Mobilbarát: minden oldal telefonon is teljes értékű, a táblázatok
-  egymás alá rendeződnek, a gombok legalább 44 px-esek.
+- Mobilbarát: 320 px-től felfelé egyetlen oldalon sincs vízszintes görgetés
+  (méréssel ellenőrizve). Telefonon a felső zöld sáv elrejtőzik, tartalma – az
+  elérhetőség és a megjelenítési beállítások – a menüfiók aljára kerül.
+  A táblázatok egymás alá rendeződnek, a gombok legalább 44 px-esek.
 - Nyomtatási stíluslap: a menük eltűnnek, a linkek URL-je kiíródik.
 
 ## Amit a régi tartalomhoz képest javítottam

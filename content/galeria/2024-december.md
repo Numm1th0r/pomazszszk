@@ -10,5 +10,4 @@ photos:
     caption: ''
   - image: /assets/img/galeria/majalis-2025.jpg
     caption: ''
-external_url: https://pomazszszk.hu/kepgaleria/2024-december/
 ---

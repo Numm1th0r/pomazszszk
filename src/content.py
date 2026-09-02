@@ -2,7 +2,7 @@
 """
 Tartalom — Szociális Szolgáltatási Központ, Pomáz.
 
-Minden szöveg és adat forrása a pomazszszk.hu jelenlegi tartalma.
+A tartalom a korábbi pomazszszk.hu oldalról származik.
 A tartalom szerkesztéséhez elég ezt a fájlt módosítani, majd újra
 lefuttatni a build.py-t.
 """
@@ -29,7 +29,9 @@ SITE = {
     "email": "szszk@szszk.pomaz.hu",
     "office_hours": "hétfő–péntek 8:30–15:00",
     "director": "dr. Király Eszter",
-    "url": "https://pomazszszk.hu",
+    # A honlap saját címe (a sitemap, az RSS és a közzétételi lista használja).
+    # Ha a pomazszszk.hu domain az ÚJ oldalra mutat, ide írd: https://pomazszszk.hu
+    "url": "https://numm1th0r.github.io/pomazszszk",
 }
 
 # --- Főmenü ---------------------------------------------------------------
@@ -547,7 +549,6 @@ def load_gallery(folder=None):
             "date": str(meta.get("date") or ""),
             "cover": cover,
             "photos": photos,
-            "external_url": str(meta.get("external_url") or ""),
             "description_html": render(body) if body.strip() else "",
         })
     albums.sort(key=lambda a: (a["date"], a["slug"]), reverse=True)
