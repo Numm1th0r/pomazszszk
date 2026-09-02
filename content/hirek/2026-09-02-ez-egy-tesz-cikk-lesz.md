@@ -4,7 +4,7 @@ date: 2026-09-02
 excerpt: Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
 image: /assets/img/hirek/pasted-image-1788383479789.png
 image_alt: ''
-highlight: true
+highlight: false
 link_label: Részletek
 link_href: ''
 ---
