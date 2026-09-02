@@ -1110,7 +1110,14 @@ def all_pages():
 # =============================================================================
 
 def git_repo_slug():
-    """A GitHub-tároló azonosítója (tulajdonos/név) a git távoli címéből."""
+    """A GitHub-tároló azonosítója (tulajdonos/név).
+
+    GitHub Actions alatt a GITHUB_REPOSITORY környezeti változóból, helyben a
+    git távoli címéből olvassuk ki.
+    """
+    env = os.environ.get("GITHUB_REPOSITORY")
+    if env and "/" in env:
+        return env
     try:
         import subprocess
         url = subprocess.run(["git", "remote", "get-url", "origin"], cwd=ROOT,
