@@ -276,7 +276,7 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
   }
   .nav__list { flex-direction: column; align-items: stretch; gap: .1rem; }
   .nav__link { padding: .85rem .9rem; font-size: 1.05rem; }
-  .nav__cta { margin: .8rem 0 0; text-align: center; padding: .9rem 1.1rem; }
+  .nav__cta { display: block; margin: .9rem 0 0; text-align: center; padding: .95rem 1.1rem; }
   .nav-scrim {
     position: fixed; inset: 0; background: rgba(20,18,15,.45); z-index: 70;
     opacity: 0; pointer-events: none; transition: opacity .25s ease;
@@ -316,11 +316,17 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
 }
 
 @media (max-width: 560px) {
-  .masthead__row { gap: .6rem; min-height: 4.4rem; }
-  .brand__mark { width: 2.4rem; height: 2.4rem; }
-  .brand__name { font-size: .95rem; }
-  .brand__place { font-size: .68rem; letter-spacing: .1em; }
-  .nav-toggle { padding: .5rem .8rem; }
+  .masthead__row { gap: .55rem; min-height: 4rem; }
+  .brand { gap: .55rem; }
+  .brand__mark { width: 2.25rem; height: 2.25rem; }
+  .brand__name { font-size: .88rem; line-height: 1.2; letter-spacing: -0.01em; }
+  .brand__place { font-size: .62rem; letter-spacing: .1em; }
+  .nav-toggle { padding: .5rem .75rem; font-size: .9rem; }
+}
+@media (max-width: 380px) {
+  /* A legkeskenyebb készülékeken a menügomb felirata elhagyható. */
+  .nav-toggle span { display: none; }
+  .nav-toggle { padding: .55rem .7rem; }
 }
 
 /* --- 4. Gombok ----------------------------------------------------------- */
@@ -365,7 +371,10 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
   box-shadow: var(--shadow-s);
 }
 .hero__eyebrow b { color: var(--brand); font-weight: 700; }
-.hero__dot { width: .55rem; height: .55rem; border-radius: 50%; background: var(--accent); margin-left: .35rem; }
+.hero__dot { width: .55rem; height: .55rem; border-radius: 50%; background: var(--accent); margin-left: .35rem; flex: none; align-self: flex-start; margin-top: .5em; }
+@media (max-width: 560px) {
+  .hero__eyebrow { padding: .45rem .9rem .45rem .5rem; font-size: .8rem; line-height: 1.45; }
+}
 .hero h1 { margin-bottom: .55rem; }
 .hero__lead { font-size: clamp(1.06rem, 1rem + .35vw, 1.22rem); color: var(--ink-2); max-width: 34em; margin-bottom: 1.7rem; }
 .hero__figure { position: relative; }
@@ -391,6 +400,8 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
   display: block; font-size: .8rem; font-weight: 700; letter-spacing: .16em;
   text-transform: uppercase; color: var(--accent); margin-bottom: .7rem;
 }
+/* A kiemelt „szemöldök” felirat közvetlenül a címsora fölött áll. */
+.eyebrow + h2, .eyebrow + h3, .prose .eyebrow + h2, .prose .eyebrow + h3 { margin-top: 0; }
 .section__lead { font-size: 1.08rem; color: var(--ink-2); margin-bottom: 0; }
 
 /* --- 7. Kártyák és rácsok ------------------------------------------------ */
@@ -405,10 +416,8 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
   overflow: hidden; box-shadow: var(--shadow-s);
   transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
 }
-.card--link:hover { transform: translateY(-3px); box-shadow: var(--shadow-m); border-color: var(--line-strong); }
 .card__media { aspect-ratio: 4/3; overflow: hidden; background: var(--surface-2); }
 .card__media img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
-.card--link:hover .card__media img { transform: scale(1.04); }
 .card__body { padding: 1.35rem 1.4rem 1.5rem; display: flex; flex-direction: column; flex: 1; }
 .card__title { font-size: 1.22rem; margin-bottom: .4rem; }
 .card__title a { color: inherit; text-decoration: none; }
@@ -418,7 +427,6 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
 .card__meta { margin-top: auto; display: flex; flex-wrap: wrap; gap: .4rem; }
 .card__more { margin-top: auto; display: inline-flex; align-items: center; gap: .4rem; font-weight: 600; color: var(--brand); font-size: .95rem; }
 .card__more svg { width: 1em; height: 1em; transition: transform .2s ease; }
-.card--link:hover .card__more svg { transform: translateX(3px); }
 
 .tag {
   display: inline-flex; align-items: center; gap: .3rem; max-width: 100%;
@@ -437,7 +445,6 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 2.5rem 0; }
   transition: transform .2s ease, box-shadow .2s ease;
 }
 a.tile { text-decoration: none; color: inherit; }
-a.tile:hover { transform: translateY(-3px); box-shadow: var(--shadow-m); }
 .tile__icon {
   width: 2.9rem; height: 2.9rem; border-radius: 12px; display: grid; place-items: center;
   background: var(--brand-soft); color: var(--brand); margin-bottom: 1rem; flex: none;
@@ -452,7 +459,6 @@ a.tile:hover { transform: translateY(-3px); box-shadow: var(--shadow-m); }
 .helpbar { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-m); }
 @media (min-width: 760px) { .helpbar { grid-template-columns: repeat(3, 1fr); } }
 .helpbar__item { background: var(--surface); padding: 1.6rem 1.5rem; display: flex; gap: 1rem; text-decoration: none; color: inherit; transition: background .16s ease; }
-.helpbar__item:hover { background: var(--surface-2); color: inherit; }
 .helpbar__ico { width: 2.6rem; height: 2.6rem; flex: none; border-radius: 10px; display: grid; place-items: center; background: var(--brand-soft); color: var(--brand); }
 .helpbar__ico svg { width: 1.35rem; height: 1.35rem; }
 .helpbar__item--urgent .helpbar__ico { background: var(--danger-soft); color: var(--danger); }
@@ -460,7 +466,11 @@ a.tile:hover { transform: translateY(-3px); box-shadow: var(--shadow-m); }
 .helpbar__d { font-size: .92rem; color: var(--ink-2); }
 
 /* --- 9. Adatsáv ---------------------------------------------------------- */
-.stats { display: grid; gap: clamp(1rem, 2.5vw, 2rem); grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)); }
+.stats { display: grid; gap: clamp(1.2rem, 2.5vw, 2rem); grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)); }
+@media (max-width: 620px) {
+  .stats { grid-template-columns: repeat(2, 1fr); gap: 1.6rem 1rem; }
+  .stat:last-child:nth-child(odd) { grid-column: 1 / -1; }
+}
 .stat { text-align: center; }
 .stat__n { font-family: var(--font-serif); font-size: clamp(2rem, 1.4rem + 2vw, 2.9rem); line-height: 1; color: var(--brand); font-weight: 600; }
 .stat__l { display: block; margin-top: .5rem; font-size: .92rem; color: var(--ink-2); }
@@ -487,6 +497,13 @@ a.tile:hover { transform: translateY(-3px); box-shadow: var(--shadow-m); }
 .prose h2 { margin-top: 2.2em; margin-bottom: .5em; }
 .prose h3 { margin-top: 1.8em; margin-bottom: .4em; }
 .prose h2:first-child, .prose h3:first-child { margin-top: 0; }
+/* A .prose h2/h3 leszármazott-szabály, ezért a benne álló kártyák, panelek és
+   dobozok címsoraira is ráragadna a nagy felső margó. Azokat visszaállítjuk. */
+.prose .tile h3, .prose .tile h4,
+.prose .card h3, .prose .card__title,
+.prose .panel h3, .prose .panel h2,
+.prose .note h3, .prose .helpbar__t,
+.prose .gallery__name, .prose blockquote h3 { margin-top: 0; }
 .prose ul, .prose ol { padding-left: 1.35em; margin-block: 1.05em; }
 .prose li { margin-bottom: .45em; }
 .prose li::marker { color: var(--brand); }
@@ -518,6 +535,13 @@ a.tile:hover { transform: translateY(-3px); box-shadow: var(--shadow-m); }
 .panel {
   background: var(--surface); border: 1px solid var(--line);
   border-radius: var(--radius); padding: 1.5rem 1.6rem; box-shadow: var(--shadow-s);
+}
+@media (max-width: 620px) {
+  /* Kisebb belső margó és ikon: így a hosszú e-mail-cím egy sorba fér. */
+  .panel { padding: 1.2rem 1.05rem; }
+  .dl__row { gap: .65rem; }
+  .dl__ico { width: 1.85rem; height: 1.85rem; }
+  .dl__ico svg { width: 1rem; height: 1rem; }
 }
 .panel--brand { background: var(--brand-soft); border-color: transparent; }
 .panel__title { font-family: var(--font-sans); font-weight: 700; font-size: .82rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 1rem; }
@@ -575,7 +599,6 @@ a.tile:hover { transform: translateY(-3px); box-shadow: var(--shadow-m); }
 .news__title a:hover { color: var(--brand); text-decoration: underline; }
 .news__thumb { display: block; margin-top: 1rem; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-s); }
 .news__thumb img { width: 100%; transition: transform .35s ease; }
-.news__thumb:hover img { transform: scale(1.03); }
 
 /* Hír-aloldal törzse */
 .post > *:first-child { margin-top: 0; }
@@ -592,10 +615,8 @@ a.tile:hover { transform: translateY(-3px); box-shadow: var(--shadow-m); }
   border: 1px solid var(--line); box-shadow: var(--shadow-s);
   transition: transform .2s ease, box-shadow .2s ease;
 }
-.gallery__card:hover { transform: translateY(-3px); box-shadow: var(--shadow-m); color: inherit; }
 .gallery__media { display: block; aspect-ratio: 4/3; overflow: hidden; background: var(--surface-2); }
 .gallery__media img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
-.gallery__card:hover .gallery__media img { transform: scale(1.05); }
 .gallery__label {
   position: absolute; inset: auto 0 0 0; padding: 2.6rem .95rem .8rem;
   background: linear-gradient(transparent, rgba(16,15,13,.55) 42%, rgba(16,15,13,.88));
@@ -668,21 +689,34 @@ a.tile:hover { transform: translateY(-3px); box-shadow: var(--shadow-m); }
 /* --- 18. Dokumentumlista ------------------------------------------------- */
 .doclist { list-style: none; padding: 0; margin: 0; display: grid; gap: .6rem; }
 .doclist a {
-  display: flex; flex-wrap: wrap; align-items: center; gap: .45rem .9rem;
-  padding: .95rem 1.15rem;
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center; gap: .3rem .9rem; padding: .95rem 1.15rem;
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-s);
   text-decoration: none; color: var(--ink); font-weight: 550;
   transition: border-color .16s ease, background .16s ease, transform .16s ease;
 }
-.doclist a:hover { border-color: var(--brand); background: var(--brand-soft); transform: translateX(2px); color: var(--ink); }
-.doclist svg { width: 1.3rem; height: 1.3rem; flex: none; color: var(--brand); }
-/* A cím legalább 11rem-et kap; ha nem fér el mellette a típusfelirat,
-   az a következő sorba csúszik – így a cím sosem szorul keskeny hasábba. */
-.doclist span { flex: 1 1 11rem; min-width: 0; overflow-wrap: break-word; }
+.doclist > li > a > svg { width: 1.3rem; height: 1.3rem; flex: none; color: var(--brand); }
+.doclist span { min-width: 0; overflow-wrap: break-word; }
+.doclist__meta { display: inline-flex; align-items: center; gap: .55rem; white-space: nowrap; }
+.doclist__meta svg { width: 1.15rem; height: 1.15rem; color: var(--brand); }
 .doclist em {
-  flex: 0 0 auto; margin-left: auto; font-style: normal; font-size: .84rem;
-  color: var(--ink-3); font-weight: 500;
+  font-style: normal; font-size: .84rem; color: var(--ink-3); font-weight: 500;
 }
+
+/* Keskeny kijelzőn a típusfelirat a cím alá kerül – így a cím teljes
+   szélességben tördelhet, és nem szorul keskeny hasábba. */
+@media (max-width: 620px) {
+  .doclist a { grid-template-columns: auto minmax(0, 1fr); row-gap: .45rem; }
+  .doclist__meta { grid-column: 2; justify-content: flex-start; }
+}
+
+/* Panelen belül ne legyen doboz a dobozban. */
+.panel .doclist { gap: 0; }
+.panel .doclist a {
+  border: 0; border-radius: 0; background: transparent; padding: .7rem .1rem;
+  border-bottom: 1px solid var(--line);
+}
+.panel .doclist li:last-child a { border-bottom: 0; }
 
 /* --- 19. Összecsukható (jogszabályok, közzététel) ------------------------ */
 details.acc {
@@ -743,4 +777,21 @@ details.acc[open] > summary { border-bottom: 1px solid var(--line); background: 
   body { background: #fff; color: #000; font-size: 11pt; }
   .section { padding-block: 1rem; }
   a[href^="http"]::after { content: " (" attr(href) ")"; font-size: .85em; color: #444; }
+}
+
+
+/* --- 23. Egérrel vezérelt kiemelések ---------------------------------------
+   Érintőképernyőn a :hover koppintás után „beragad”, ezért a mutató-alapú
+   hatásokat csak ott engedjük, ahol tényleg van egérmutató. */
+@media (hover: hover) and (pointer: fine) {
+  .card--link:hover { transform: translateY(-3px); box-shadow: var(--shadow-m); border-color: var(--line-strong); }
+  .card--link:hover .card__media img { transform: scale(1.04); }
+  .card--link:hover .card__more svg { transform: translateX(3px); }
+  a.tile:hover { transform: translateY(-3px); box-shadow: var(--shadow-m); }
+  .helpbar__item:hover { background: var(--surface-2); color: inherit; }
+  .news__thumb:hover img { transform: scale(1.03); }
+  .gallery__card:hover { transform: translateY(-3px); box-shadow: var(--shadow-m); color: inherit; }
+  .gallery__card:hover .gallery__media img { transform: scale(1.05); }
+  .doclist a:hover { border-color: var(--brand); background: var(--brand-soft); transform: translateX(2px); color: var(--ink); }
+  .panel .doclist a:hover { background: var(--brand-soft); transform: none; border-color: transparent; border-bottom-color: var(--line); }
 }

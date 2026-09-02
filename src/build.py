@@ -734,8 +734,10 @@ def page_dokumentumok():
     groups = []
     for g in DOC_GROUPS:
         docs = "".join(
-            f'<li><a href="{href}"{link_attrs(href)}>{icon("file")}<span>{esc(label)}</span>'
-            f'<em>{esc(kind)}</em>{icon("download") if is_external(href) else ""}</a></li>'
+            f'<li><a href="{href}"{link_attrs(href)}>{icon("file")}'
+            f'<span>{esc(label)}</span>'
+            f'<span class="doclist__meta"><em>{esc(kind)}</em>'
+            f'{icon("download") if is_external(href) else ""}</span></a></li>'
             for label, kind, href in g["docs"])
         extra = ""
         if g.get("list"):
